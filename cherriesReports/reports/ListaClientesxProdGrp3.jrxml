@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ClientesXProductor" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="BlankPage" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="c32eabab-1260-4fbc-89bd-0452284e08b4">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="cerezas"/>
+	<subDataset name="dsCliente" whenResourceMissingType="Empty" uuid="4eaefe4a-74e8-46ea-a241-402825ef5526">
+		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Connection"/>
+		<parameter name="dsProductora" class="java.lang.Integer"/>
+		<queryString language="SQL">
+			<![CDATA[SELECT 
+-- Empresa cliente
+       cl.id,
+       cl.nombre,
+	   cl.t_negocio,
+	   p.continent,
+       p.nombre,
+	   cd.nombre,
+       cl.direc
+FROM 
+     fah_contratos c,
+     fah_empresasproductoras prod,
+     fah_empresascliente cl,
+     fah_paises p,
+     fah_ciudades cd
+WHERE 
+      c.id_prod = prod.id AND
+      c.id_client = cl.id AND
+      
+      prod.id =  $P{dsProductora}  AND 
+      cl.id_pais = p.id AND
+      p.id = cd.id_pais AND
+      cl.id_cdad = cd.id]]>
+		</queryString>
+		<field name="nombre" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+			<property name="com.jaspersoft.studio.field.label" value="nombre"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="fah_empresasproductoras"/>
+		</field>
+		<field name="tipo" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="tipo"/>
+			<property name="com.jaspersoft.studio.field.label" value="tipo"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="fah_empresasproductoras"/>
+		</field>
+		<field name="id" class="java.lang.Integer">
+			<property name="com.jaspersoft.studio.field.name" value="id"/>
+			<property name="com.jaspersoft.studio.field.label" value="id"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="fah_empresascliente"/>
+		</field>
+		<field name="COLUMN_4" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+			<property name="com.jaspersoft.studio.field.label" value="nombre"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="fah_empresascliente"/>
+		</field>
+		<field name="t_negocio" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="t_negocio"/>
+			<property name="com.jaspersoft.studio.field.label" value="t_negocio"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="fah_empresascliente"/>
+		</field>
+		<field name="continent" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="continent"/>
+			<property name="com.jaspersoft.studio.field.label" value="continent"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="fah_paises"/>
+		</field>
+		<field name="COLUMN_7" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+			<property name="com.jaspersoft.studio.field.label" value="nombre"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="fah_paises"/>
+		</field>
+		<field name="COLUMN_8" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+			<property name="com.jaspersoft.studio.field.label" value="nombre"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="fah_ciudades"/>
+		</field>
+		<field name="direc" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="direc"/>
+			<property name="com.jaspersoft.studio.field.label" value="direc"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="fah_empresascliente"/>
+		</field>
+	</subDataset>
+	<parameter name="dsProductora" class="java.lang.Integer"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT 
+-- Empresa productora
+	 p.nombre
+FROM 
+     fah_empresasproductoras p
+WHERE 
+      p.id =  $P{dsProductora}]]>
+	</queryString>
+	<field name="nombre" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.label" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_empresasproductoras"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="170" splitType="Stretch">
+			<image>
+				<reportElement x="620" y="0" width="150" height="170" uuid="2560fdae-25cb-4117-ae79-ed943b379d72"/>
+				<imageExpression><![CDATA["C:/Users/franc/Downloads/sello2.png"]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="30" y="50" width="609" height="50" uuid="ecf5adc7-d93e-48b9-a51a-ae9b6ab92abc"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Book Antiqua" size="30" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement x="-20" y="150" width="21" height="20" uuid="c8b9a36e-8841-495b-8980-463b9a7315fd"/>
+				<subreportParameter name="dsProductora">
+					<subreportParameterExpression><![CDATA[$P{dsProductora}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["SubListaClientesxProdGrp3.jrxml"]]></subreportExpression>
+			</subreport>
+		</band>
+	</title>
+	<detail>
+		<band height="28" splitType="Stretch"/>
+	</detail>
+	<summary>
+		<band height="99">
+			<staticText>
+				<reportElement x="690" y="0" width="109" height="20" uuid="6fe710be-f784-4af7-9a75-d86ee32dd223"/>
+				<textElement textAlignment="Right">
+					<font fontName="Book Antiqua" size="10"/>
+				</textElement>
+				<text><![CDATA[Reporte realizado por:]]></text>
+			</staticText>
+			<textField pattern="M/d/yy">
+				<reportElement x="740" y="80" width="60" height="19" uuid="6226d21e-f783-42c7-a57e-841d930a74e4"/>
+				<textElement textAlignment="Right">
+					<font fontName="Book Antiqua" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement mode="Opaque" x="2" y="70" width="799" height="1" backcolor="#ADAAAA" uuid="7a991dd6-e3bd-460c-a811-01f194624f95">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="720" y="20" width="80" height="40" uuid="4c6f85c7-e13a-4124-ad27-fd2427dcf485"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Book Antiqua" size="10"/>
+				</textElement>
+				<text><![CDATA[Arturo Hung
+Javier Molina
+Francis Bompart]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

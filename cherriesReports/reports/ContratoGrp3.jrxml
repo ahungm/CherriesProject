@@ -1,0 +1,518 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="contrato" pageWidth="595" pageHeight="842" whenNoDataType="BlankPage" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Empty" isIgnorePagination="true" uuid="26040585-c277-4c22-8935-a0971599887c">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="cerezas"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+			<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+			<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+			<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+			<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+			<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+			<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="dsDetalles" uuid="a8a8b5d8-da45-45ba-9c62-ebac631f0f5b">
+		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="cerezas"/>
+		<parameter name="contrato" class="java.lang.Integer"/>
+		<queryString language="SQL">
+			<![CDATA[SELECT 	concat(v.nombre,' ',c.calibre) cereza, dc.ctd cantidad, p.precio, (p.precio*dc.ctd) total, ifnull(date_format(dc.fe_envio, '%d %M'),'No aplica') envio
+FROM   	fah_contratos cont, fah_detallescontrato dc, fah_variedadescrz v, fah_cultivos c, fah_precioscrzpais p 
+WHERE	cont.id = $P{contrato} AND dc.id_cont = $P{contrato} AND dc.id_prod_cont = cont.id_prod AND c.id_prod = dc.id_prod_cont AND dc.id_cult = c.id AND dc.id_crz_cult = c.id_crz AND v.id = c.id_crz AND 
+				dc.id_crz_cult = p.id_crz AND p.calibre = c.calibre AND
+        		YEAR(p.fe_i) <= YEAR(cont.fe_emi) AND ((isnull(p.fe_f)) OR (YEAR(p.fe_f) > YEAR(cont.fe_emi)))]]>
+		</queryString>
+		<field name="cereza" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="cereza"/>
+			<property name="com.jaspersoft.studio.field.label" value="cereza"/>
+		</field>
+		<field name="cantidad" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.name" value="ctd"/>
+			<property name="com.jaspersoft.studio.field.label" value="cantidad"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="fah_detallescontrato"/>
+		</field>
+		<field name="precio" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.name" value="precio"/>
+			<property name="com.jaspersoft.studio.field.label" value="precio"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="fah_precioscrzpais"/>
+		</field>
+		<field name="total" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.name" value="total"/>
+			<property name="com.jaspersoft.studio.field.label" value="total"/>
+		</field>
+		<field name="envio" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="envio"/>
+			<property name="com.jaspersoft.studio.field.label" value="envio"/>
+		</field>
+		<variable name="cantidad1" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+			<variableExpression><![CDATA[$F{cantidad}]]></variableExpression>
+		</variable>
+		<variable name="total1" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+			<variableExpression><![CDATA[$F{total}]]></variableExpression>
+		</variable>
+	</subDataset>
+	<parameter name="contrato" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT 	ep.id id_prod, ep.nombre prod, ep.direc prod_direc, r.nombre prod_reg, p.nombre prod_pais,
+		ec.id id_client, ec.nombre cliente, ec.direc client_direc, cd.nombre client_cdad, pp.nombre client_pais, date_format(cont.fe_emi, '%d %M %Y') fecha, IF(cont.transp='Aéreo', 'aérea', 'terrestre') transp,
+        if (f.tipo = 'Cuota', 'cuotas', 'contado') tipo, 
+        if(isnull(f.conta_emi)," ", (if(f.conta_emi = 1, 'realizando el mismo al momento de ser expedido el documento presente.', ''))) conta_emi, 
+        if(isnull(f.conta_env), " ", if(f.conta_env = 1, 'El envio de toda la mercancia se realizara para una misma fecha.', 'El envio de la mercancia se realizara en diferentes fechas, priorizando su estado de conservación y frescura.')) conta_env, 
+        if(isnull(f.num_cuotas), " ", concat('especificamente un total de ', f.num_cuotas,'.')) num_cuotas,
+		if(isnull(cont.descuento), " ", concat('El precio final a pagar tendra un ', cont.descuento, '% de descuento sobre el monto total.')) descuento 
+FROM 	fah_contratos cont, fah_empresasproductoras ep, fah_empresascliente ec, fah_paises p, fah_regiones r, fah_ciudades cd, fah_paises pp,fah_formaspago f
+WHERE  	cont.id = $P{contrato} AND cont.id_prod = ep.id AND cont.id_client = ec.id AND
+		f.id_prod = cont.id_prod AND f.id = cont.id_fr_pg AND
+		ep.id_pais = p.id AND r.id_pais = p.id AND r.id = ep.id_reg AND  
+        ec.id_pais = pp.id AND cd.id_pais = pp.id AND cd.id = ec.id_cdad]]>
+	</queryString>
+	<field name="id_prod" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="id"/>
+		<property name="com.jaspersoft.studio.field.label" value="id_prod"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_empresasproductoras"/>
+	</field>
+	<field name="prod" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.label" value="prod"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_empresasproductoras"/>
+	</field>
+	<field name="prod_direc" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="direc"/>
+		<property name="com.jaspersoft.studio.field.label" value="prod_direc"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_empresasproductoras"/>
+	</field>
+	<field name="prod_reg" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.label" value="prod_reg"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_regiones"/>
+	</field>
+	<field name="prod_pais" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.label" value="prod_pais"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_paises"/>
+	</field>
+	<field name="id_client" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="id"/>
+		<property name="com.jaspersoft.studio.field.label" value="id_client"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_empresascliente"/>
+	</field>
+	<field name="cliente" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.label" value="cliente"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_empresascliente"/>
+	</field>
+	<field name="client_direc" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="direc"/>
+		<property name="com.jaspersoft.studio.field.label" value="client_direc"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_empresascliente"/>
+	</field>
+	<field name="client_cdad" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.label" value="client_cdad"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_ciudades"/>
+	</field>
+	<field name="client_pais" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.label" value="client_pais"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_paises"/>
+	</field>
+	<field name="fecha" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="fecha"/>
+		<property name="com.jaspersoft.studio.field.label" value="fecha"/>
+	</field>
+	<field name="transp" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="transp"/>
+		<property name="com.jaspersoft.studio.field.label" value="transp"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_contratos"/>
+	</field>
+	<field name="tipo" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="tipo"/>
+		<property name="com.jaspersoft.studio.field.label" value="tipo"/>
+	</field>
+	<field name="conta_emi" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="conta_emi"/>
+		<property name="com.jaspersoft.studio.field.label" value="conta_emi"/>
+	</field>
+	<field name="conta_env" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="conta_env"/>
+		<property name="com.jaspersoft.studio.field.label" value="conta_env"/>
+	</field>
+	<field name="num_cuotas" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="num_cuotas"/>
+		<property name="com.jaspersoft.studio.field.label" value="num_cuotas"/>
+	</field>
+	<field name="descuento" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="descuento"/>
+		<property name="com.jaspersoft.studio.field.label" value="descuento"/>
+	</field>
+	<variable name="Variable_1" class="java.lang.String"/>
+	<background>
+		<band splitType="Prevent"/>
+	</background>
+	<title>
+		<band height="206" splitType="Prevent">
+			<staticText>
+				<reportElement x="0" y="60" width="440" height="40" uuid="086a5bef-43cb-415f-80e3-63c13bb47849"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Book Antiqua" size="20" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CONTRATO DE EXPORTACIÓN]]></text>
+			</staticText>
+			<image>
+				<reportElement x="440" y="30" width="100" height="100" uuid="f50a233f-9e82-4b9a-9a15-9a4f151dd53a"/>
+				<imageExpression><![CDATA["C:/Users/franc/Downloads/sello2.png"]]></imageExpression>
+			</image>
+			<rectangle>
+				<reportElement mode="Opaque" x="0" y="150" width="555" height="1" forecolor="#DD5353" backcolor="#DD5353" uuid="0f51ff6c-329a-4227-b88f-87ae68c15340"/>
+				<graphicElement>
+					<pen lineColor="#DD5353"/>
+				</graphicElement>
+			</rectangle>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="479" splitType="Prevent">
+			<image>
+				<reportElement x="100" y="42" width="360" height="369" uuid="e90e5ed1-e34d-4a0a-abb1-7b10dbe15da1">
+					<property name="com.jaspersoft.studio.element.name" value="watermark"/>
+				</reportElement>
+				<imageExpression><![CDATA["C:/Users/franc/Downloads/logo.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="0" y="50" width="555" height="20" uuid="c3df15c8-d86d-44a4-9ac0-b6e5b903ddf3"/>
+				<textElement textAlignment="Left">
+					<font fontName="Book Antiqua" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DE UNA PARTE,]]></text>
+			</staticText>
+			<textField textAdjust="StretchHeight">
+				<reportElement x="0" y="100" width="554" height="50" uuid="da9505fc-b95f-4871-9374-b21546f89133"/>
+				<textElement textAlignment="Justified" markup="styled">
+					<font fontName="Book Antiqua" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<style isBold='true' pdfFontName='Helvetica-Bold'>" + $F{prod} + "</style>" + ", con domicilio en " + $F{prod_direc} + ", " + $F{prod_reg} + ", " + $F{prod_pais} + " y" + "<style isBold='true' pdfFontName='Helvetica-Bold'>" + " número de identificación " + $F{id_prod} + "</style>" +  "."]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="190" width="555" height="20" uuid="abd632a1-a4cd-45d0-af6b-215f16c0bfb4"/>
+				<textElement textAlignment="Left">
+					<font fontName="Book Antiqua" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Y DE OTRA,]]></text>
+			</staticText>
+			<textField textAdjust="StretchHeight">
+				<reportElement x="0" y="240" width="555" height="90" uuid="9a76a8f9-0c57-444b-b261-deed2b95e2e2"/>
+				<textElement textAlignment="Justified" markup="styled">
+					<font fontName="Book Antiqua" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<style isBold='true' pdfFontName='Helvetica-Bold'>" + $F{cliente} + "</style>" + ", con domicilio en " + $F{client_direc} + ", " + $F{client_cdad} + ", " + $F{client_pais} + " y" + "<style isBold='true' pdfFontName='Helvetica-Bold'>" + " número de identificación " + $F{id_client} + "</style>" + "."]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight">
+				<reportElement x="0" y="-20" width="555" height="20" uuid="08846d60-b865-42fc-abe7-1ce902b28f5d"/>
+				<textElement markup="styled">
+					<font fontName="Book Antiqua" size="14" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Fecha de emisión: " + "<style isBold='true' pdfFontName='Helvetica-Bold'>" + $F{fecha} + "</style>"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="339" width="555" height="40" uuid="de4a4fc5-ff25-4e8c-b54b-447cc56e37c9"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Book Antiqua" size="14"/>
+				</textElement>
+				<text><![CDATA[     Ambas partes declaran que tienen interés en realizar operaciones de compraventas de productos a las que se refiere el presente Contrato y acuerdan lo siguiente:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="32" y="411" width="508" height="68" uuid="2adbfae3-e5b4-45ce-8735-4d6183c84ca0"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Book Antiqua" size="14" pdfFontName="Helvetica" pdfEncoding=""/>
+				</textElement>
+				<textFieldExpression><![CDATA["1. El envío será realizado vía " + $F{transp} + ".\n\n" + "2. El método de pago es por " + $F{tipo} + ", " + $F{conta_emi} + $F{num_cuotas} + "\n\n" + (($F{conta_env}.length() < 2) ? 
+	(($F{descuento}.equals(" ")) ? "" : "3. "+ $F{descuento}) 
+:
+	(($F{descuento}.equals(" ")) ? ("3. " + $F{conta_env}) : "3. "+ $F{conta_env} + "\n4. " + 		$F{descuento}) 
+		
+	)]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<lastPageFooter>
+		<band height="140">
+			<staticText>
+				<reportElement x="440" y="40" width="115" height="20" uuid="526c22a4-a76c-418b-a88f-854a2a065ecb"/>
+				<textElement textAlignment="Right">
+					<font fontName="Book Antiqua" size="10"/>
+				</textElement>
+				<text><![CDATA[Reporte realizado por:]]></text>
+			</staticText>
+			<textField pattern="M/d/yy">
+				<reportElement x="490" y="120" width="66" height="19" uuid="bbbb14bc-057a-41b2-b964-60aee513658e"/>
+				<textElement textAlignment="Right">
+					<font fontName="Book Antiqua" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement mode="Opaque" x="0" y="110" width="555" height="2" backcolor="#ADAAAA" uuid="885a2ad6-1265-4ccb-a799-6cb1641a00e1">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="470" y="60" width="86" height="40" uuid="d03d6995-81cc-48a6-a5d3-3c0d378233a7"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Book Antiqua" size="10"/>
+				</textElement>
+				<text><![CDATA[Arturo Hung
+Javier Molina
+Francis Bompart]]></text>
+			</staticText>
+		</band>
+	</lastPageFooter>
+	<summary>
+		<band height="170">
+			<componentElement>
+				<reportElement mode="Opaque" x="0" y="69" width="554" height="89" forecolor="#FFFFFF" backcolor="#FFFFFF" uuid="fe23af33-a48c-4422-9a7c-5a1d1296635a">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+					<property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
+					<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
+					<property name="com.jaspersoft.studio.table.style.detail" value="Table_TD"/>
+					<property name="com.jaspersoft.studio.components.autoresize.proportional" value="true"/>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" whenNoDataType="Blank">
+					<datasetRun subDataset="dsDetalles" uuid="06dc8262-33d2-43f9-a8a7-0c6bd03cc398">
+						<datasetParameter name="contrato">
+							<datasetParameterExpression><![CDATA[$P{contrato}]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="118" uuid="6dde94f4-8376-4660-aaab-9ebf51027b29">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
+						<jr:columnHeader style="Table_CH" height="30">
+							<box>
+								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<staticText>
+								<reportElement mode="Opaque" x="0" y="0" width="118" height="30" forecolor="#FFFFFF" backcolor="#C70039" uuid="68b92536-abb7-4944-8975-fbff837faa86"/>
+								<box>
+									<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Book Antiqua" size="12" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Variedad de cereza]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement mode="Transparent" x="0" y="0" width="118" height="30" backcolor="#FFE8F6" uuid="aaafcc36-b093-47ab-a94e-82fc38b78320"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Book Antiqua" size="12" isBold="false"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{cereza}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="98" uuid="5a864be1-2c69-4a82-a8c2-d5777f4ce04c">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
+						<jr:columnHeader style="Table_CH" height="30">
+							<box>
+								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<staticText>
+								<reportElement mode="Opaque" x="0" y="0" width="98" height="30" forecolor="#FFFFFF" backcolor="#C70039" uuid="d8e00f75-7898-4e90-b036-072891463534"/>
+								<box>
+									<bottomPen lineWidth="0.75"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Book Antiqua" size="12" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Precio kg]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField pattern="#,##0.00# $;(#,##0.00#-) $">
+								<reportElement mode="Transparent" x="0" y="0" width="98" height="30" backcolor="#FFE8F6" uuid="03d0b885-d90d-4781-a810-bea75c581ce8"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Book Antiqua" size="12" isBold="false"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{precio}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="116" uuid="d2cead83-4ee5-4ed8-bf9c-a60374300ff4">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column4"/>
+						<jr:columnHeader style="Table_CH" height="30">
+							<box>
+								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<staticText>
+								<reportElement mode="Opaque" x="0" y="0" width="116" height="30" forecolor="#FFFFFF" backcolor="#C70039" uuid="a5e8e9b4-52d7-4329-a4f3-6c798c71f5fa"/>
+								<box>
+									<bottomPen lineWidth="0.75"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Book Antiqua" size="12" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Fecha de envio (aprox.)]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement mode="Transparent" x="0" y="0" width="116" height="30" backcolor="#FFE8F6" uuid="a45339ba-447f-4aff-9091-334e4340ff30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Book Antiqua" size="12" isBold="false"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{envio}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="116" uuid="de1eb0d5-f337-4824-bd95-b19236fcaa8d">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
+						<jr:columnHeader style="Table_CH" height="30">
+							<box>
+								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<staticText>
+								<reportElement mode="Opaque" x="0" y="0" width="116" height="30" forecolor="#FFFFFF" backcolor="#C70039" uuid="fcad8557-c363-4d3f-ad3a-9303d90d15a2"/>
+								<box>
+									<bottomPen lineWidth="0.75"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Book Antiqua" size="12" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Cantidad]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="Table_CH" height="30" rowSpan="1">
+							<box>
+								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textField pattern="#,##0.00# kg;(#,##0.00#-) kg">
+								<reportElement mode="Opaque" x="0" y="0" width="116" height="30" forecolor="#FFFFFF" backcolor="#DD5353" uuid="88dbbed9-e475-4ec3-8142-59c2a5e1c6cd"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Book Antiqua" size="12" isBold="true"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{cantidad1}]]></textFieldExpression>
+							</textField>
+						</jr:columnFooter>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField pattern="#,##0.00# kg;(#,##0.00#-) kg">
+								<reportElement mode="Transparent" x="0" y="0" width="116" height="30" backcolor="#FFE8F6" uuid="ca9df37e-a0bc-4243-84d8-61ecaa1dbb62"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Book Antiqua" size="12" isBold="false"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="106" uuid="610c1a71-05d5-481f-9104-604821b59b9e">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column5"/>
+						<jr:columnHeader style="Table_CH" height="30">
+							<box>
+								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<staticText>
+								<reportElement mode="Opaque" x="0" y="0" width="106" height="30" forecolor="#FFFFFF" backcolor="#C70039" uuid="e2f6e5d2-3515-4e13-a3a7-a9a650f82cff"/>
+								<box>
+									<bottomPen lineWidth="0.75"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Book Antiqua" size="12" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Subtotal]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="Table_CH" height="30" rowSpan="1">
+							<box>
+								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textField pattern="#,##0.00# $;(#,##0.00#-) $">
+								<reportElement mode="Opaque" x="0" y="0" width="106" height="30" forecolor="#FFFFFF" backcolor="#DD5353" uuid="26862597-f72c-4382-b94e-0227d3917ca7"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Book Antiqua" size="12" isBold="true"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{total1}]]></textFieldExpression>
+							</textField>
+						</jr:columnFooter>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField pattern="#,##0.00# $;(#,##0.00#-) $">
+								<reportElement mode="Transparent" x="0" y="0" width="106" height="30" backcolor="#FFE8F6" uuid="33f4665c-7d1f-42a4-adfb-e33be312176b"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Book Antiqua" size="12" isBold="false"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+			<staticText>
+				<reportElement x="80" y="20" width="159" height="20" uuid="b8f47b8f-501c-49d8-a105-80cede313e61"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+					<pen lineStyle="Double"/>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Book Antiqua" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Detalles del contrato]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement mode="Opaque" x="32" y="40" width="438" height="1" forecolor="#DD5353" backcolor="#DD5353" uuid="50082558-a986-4114-8a56-1622718fd8af">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<graphicElement>
+					<pen lineColor="#DD5353"/>
+				</graphicElement>
+			</rectangle>
+		</band>
+	</summary>
+</jasperReport>

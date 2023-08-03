@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fichaProd" pageWidth="595" pageHeight="842" whenNoDataType="BlankPage" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Empty" uuid="530a7f3a-f63f-413a-82d5-e915760c55e5">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="cerezas"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="152"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="843"/>
+	<subDataset name="dsAsoc" whenResourceMissingType="Empty" uuid="0c239d29-cf34-46fb-b93e-9a034a591cb7">
+		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="cerezas"/>
+		<parameter name="productora" class="java.lang.Integer"/>
+		<queryString language="SQL">
+			<![CDATA[SELECT a.nombre asoc
+FROM fah_asociacionesregionales a, fah_empresasproductoras e
+WHERE e.id = $P{productora} AND e.id_asoc = a.id]]>
+		</queryString>
+		<field name="asoc" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+			<property name="com.jaspersoft.studio.field.label" value="asoc"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="fah_asociacionesregionales"/>
+		</field>
+	</subDataset>
+	<subDataset name="dsCoop" whenResourceMissingType="Empty" uuid="6534ebbf-e5d9-46d6-af5c-89c10d788a96">
+		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="cerezas"/>
+		<parameter name="productora" class="java.lang.Integer">
+			<defaultValueExpression><![CDATA[$P{productora}]]></defaultValueExpression>
+		</parameter>
+		<queryString language="SQL">
+			<![CDATA[SELECT c.nombre 
+FROM fah_empresasproductoras e, fah_empresasproductoras c
+WHERE e.id = $P{productora}  AND e.id_coop = c.id]]>
+		</queryString>
+		<field name="nombre" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+			<property name="com.jaspersoft.studio.field.label" value="nombre"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="fah_empresasproductoras"/>
+		</field>
+	</subDataset>
+	<parameter name="productora" class="java.lang.Integer"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT e.nombre nombre, e.tipo, e.direc direc, e.envase env, r.nombre reg, p.nombre pais
+FROM fah_empresasproductoras e, fah_regiones r, fah_paises p
+WHERE e.id = $P{productora} AND e.id_pais = p.id AND e.id_pais = r.id_pais AND e.id_reg = r.id]]>
+	</queryString>
+	<field name="nombre" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.label" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_empresasproductoras"/>
+	</field>
+	<field name="tipo" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="tipo"/>
+		<property name="com.jaspersoft.studio.field.label" value="tipo"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_empresasproductoras"/>
+	</field>
+	<field name="direc" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="direc"/>
+		<property name="com.jaspersoft.studio.field.label" value="direc"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_empresasproductoras"/>
+	</field>
+	<field name="env" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="envase"/>
+		<property name="com.jaspersoft.studio.field.label" value="env"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_empresasproductoras"/>
+	</field>
+	<field name="reg" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.label" value="reg"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_regiones"/>
+	</field>
+	<field name="pais" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.label" value="pais"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_paises"/>
+	</field>
+	<title>
+		<band height="60" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="555" height="50" forecolor="#FFFFFF" backcolor="#DD5353" uuid="75f629e6-6e6a-41a9-a02d-d4904069cb26"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Book Antiqua" size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ficha Técnica de Empresa Productora]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="408" splitType="Stretch">
+			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+			<frame>
+				<reportElement x="0" y="0" width="555" height="58" uuid="7f0c3b89-28e8-4264-b628-57471eb54dd6">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.HorizontalRowLayout"/>
+				</reportElement>
+				<frame>
+					<reportElement x="0" y="0" width="555" height="58" uuid="6bdb1664-2226-49c9-8c99-3ccbe96e4517">
+						<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+					</reportElement>
+					<textField>
+						<reportElement x="0" y="0" width="555" height="29" uuid="ecdf3943-f59f-48b7-a5bd-10dd78d346bf"/>
+						<box leftPadding="0">
+							<topPen lineStyle="Solid" lineColor="#000000"/>
+							<leftPen lineStyle="Solid" lineColor="#000000"/>
+							<bottomPen lineStyle="Solid" lineColor="#000000"/>
+							<rightPen lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textElement>
+							<font fontName="Book Antiqua" size="12" isBold="true"/>
+						</textElement>
+						<textFieldExpression><![CDATA["Nombre de  la " + $F{tipo}]]></textFieldExpression>
+					</textField>
+					<textField>
+						<reportElement x="0" y="29" width="555" height="29" uuid="fc14587f-0e10-4a89-a9c0-48f057517d97"/>
+						<box leftPadding="5"/>
+						<textElement verticalAlignment="Top">
+							<font fontName="Book Antiqua" size="12" isBold="false"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
+					</textField>
+				</frame>
+			</frame>
+			<frame>
+				<reportElement x="0" y="70" width="555" height="31" uuid="be051383-366c-4e32-9899-230949ec7922">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.HorizontalRowLayout"/>
+				</reportElement>
+				<staticText>
+					<reportElement x="0" y="0" width="278" height="31" uuid="ea620f63-de2a-4109-88cc-e6fce3a558a9"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="Book Antiqua" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Sector económico]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="278" y="0" width="277" height="31" uuid="ad4a95e3-5193-4201-aecb-ff81a1d58398"/>
+					<box leftPadding="0"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="Book Antiqua" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Actividad]]></text>
+				</staticText>
+			</frame>
+			<frame>
+				<reportElement x="0" y="101" width="555" height="29" uuid="a8e1ad0d-b377-4ea7-8e31-6c05cefca938">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.HorizontalRowLayout"/>
+				</reportElement>
+				<staticText>
+					<reportElement x="0" y="0" width="278" height="29" uuid="aa9e8b4f-8411-498f-a511-b8f46a348481"/>
+					<box topPadding="0" leftPadding="5"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="Book Antiqua" size="12" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Industria alimentaria]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="278" y="0" width="277" height="29" uuid="91219d60-87ec-4b08-bbef-b811ec7a580f"/>
+					<box leftPadding="5"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="Book Antiqua" size="12" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Produccion y venta de cerezas]]></text>
+				</staticText>
+			</frame>
+			<frame>
+				<reportElement x="0" y="140" width="555" height="30" uuid="73c63270-4d8e-4614-b8e7-a7b767067a65">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.HorizontalRowLayout"/>
+				</reportElement>
+				<staticText>
+					<reportElement x="0" y="0" width="555" height="30" uuid="3be9a9be-cc40-430f-9d79-52bdd349b5c1"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="Book Antiqua" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Dirección]]></text>
+				</staticText>
+			</frame>
+			<frame>
+				<reportElement x="0" y="210" width="555" height="30" uuid="d2136f00-2965-4129-8450-051a56cd6854">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.HorizontalRowLayout"/>
+				</reportElement>
+				<staticText>
+					<reportElement x="0" y="0" width="278" height="30" uuid="eae5f182-6e3c-4af3-9434-f2085eb91511"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="Book Antiqua" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Región]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="278" y="0" width="277" height="30" uuid="e7dbe0aa-54d2-44ed-b2ef-192c1af25020"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="Book Antiqua" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[País]]></text>
+				</staticText>
+			</frame>
+			<frame>
+				<reportElement x="0" y="240" width="555" height="30" uuid="23611e19-be63-4b06-8df2-f07f62bfcfe5">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.HorizontalRowLayout"/>
+				</reportElement>
+				<textField>
+					<reportElement x="0" y="0" width="278" height="30" uuid="2714f5a8-0955-4da9-8e87-3cec74ea3c4a"/>
+					<box leftPadding="5"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="Book Antiqua" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{reg}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="278" y="0" width="277" height="30" uuid="721412cd-8428-47e4-8dac-51864ec4149e"/>
+					<box leftPadding="5"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="Book Antiqua" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{pais}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<textField>
+				<reportElement x="0" y="170" width="555" height="30" uuid="025496a4-1e27-475b-8e47-ac973ca729c6"/>
+				<box leftPadding="5"/>
+				<textElement>
+					<font fontName="Book Antiqua" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{direc}]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement x="0" y="280" width="555" height="58" isRemoveLineWhenBlank="true" uuid="2596ab1d-36ba-4fdc-b8f4-1b9cbc8a8d40">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+				</reportElement>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+					<datasetRun subDataset="dsCoop" uuid="31176717-ecba-43a8-808c-773d605fc89c">
+						<datasetParameter name="productora">
+							<datasetParameterExpression><![CDATA[$P{productora}]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:listContents height="58" width="555">
+						<textField>
+							<reportElement x="0" y="0" width="555" height="29" uuid="ff34ad96-0a48-4a68-88ef-c20680d96aef"/>
+							<textElement>
+								<font fontName="Book Antiqua" size="12" isBold="true"/>
+							</textElement>
+							<textFieldExpression><![CDATA["Cooperativa"]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="0" y="29" width="555" height="29" uuid="15c14194-5d64-4e0c-b3b4-5c98ede1959d"/>
+							<box leftPadding="5"/>
+							<textElement>
+								<font fontName="Book Antiqua" size="12"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
+						</textField>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
+			<componentElement>
+				<reportElement x="0" y="350" width="555" height="58" isRemoveLineWhenBlank="true" uuid="42489cc3-aeff-4058-8153-7de928336acc">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+				</reportElement>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+					<datasetRun subDataset="dsAsoc" uuid="6409b63f-a92f-465f-b943-bd47f1f081a2">
+						<datasetParameter name="productora">
+							<datasetParameterExpression><![CDATA[$P{productora}]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:listContents height="58" width="555">
+						<textField>
+							<reportElement x="0" y="0" width="554" height="29" uuid="0a9932ae-7f23-4e67-ad4a-35e70235cfb6"/>
+							<textElement>
+								<font fontName="Book Antiqua" size="12" isBold="true"/>
+							</textElement>
+							<textFieldExpression><![CDATA["Asociación Regional"]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="0" y="29" width="554" height="28" uuid="08bc616d-9c86-4149-9010-4379f0181d8d"/>
+							<box leftPadding="5"/>
+							<textElement>
+								<font fontName="Book Antiqua" size="12"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{asoc}]]></textFieldExpression>
+						</textField>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="45" splitType="Stretch">
+			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+			<subreport>
+				<reportElement x="0" y="23" width="555" height="22" uuid="a194df81-16d7-4eb0-9925-e477d1a16e66"/>
+				<subreportParameter name="productora">
+					<subreportParameterExpression><![CDATA[$P{productora}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["FichaProdCultsGrp3.jrxml"]]></subreportExpression>
+			</subreport>
+		</band>
+	</columnHeader>
+	<lastPageFooter>
+		<band height="119">
+			<staticText>
+				<reportElement x="440" y="20" width="115" height="20" uuid="c5703bbd-3d7e-4830-bc83-a257cce9fdbe"/>
+				<textElement textAlignment="Right">
+					<font fontName="Book Antiqua" size="10"/>
+				</textElement>
+				<text><![CDATA[Reporte realizado por:]]></text>
+			</staticText>
+			<textField pattern="M/d/yy">
+				<reportElement x="490" y="100" width="66" height="19" uuid="13d6aaa4-7430-43bd-a868-793562a95308"/>
+				<textElement textAlignment="Right">
+					<font fontName="Book Antiqua" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement mode="Opaque" x="0" y="90" width="555" height="2" backcolor="#ADAAAA" uuid="d91b4698-12d7-4eee-8d6e-e2ad8c435471">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="470" y="40" width="86" height="40" uuid="5cf7804d-90f3-4526-8c40-029615241b54"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Book Antiqua" size="10"/>
+				</textElement>
+				<text><![CDATA[Arturo Hung
+Javier Molina
+Francis Bompart]]></text>
+			</staticText>
+		</band>
+	</lastPageFooter>
+	<summary>
+		<band height="45">
+			<subreport>
+				<reportElement x="0" y="20" width="555" height="25" isRemoveLineWhenBlank="true" uuid="453fc919-d2c7-4655-8d31-1313ec979d60"/>
+				<subreportParameter name="productora">
+					<subreportParameterExpression><![CDATA[$P{productora}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["FichaProdProvsGrp3.jrxml"]]></subreportExpression>
+			</subreport>
+		</band>
+	</summary>
+</jasperReport>

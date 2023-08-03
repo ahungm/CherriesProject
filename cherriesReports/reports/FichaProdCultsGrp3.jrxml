@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fichaProdCults" pageWidth="555" pageHeight="100" whenNoDataType="BlankPage" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" whenResourceMissingType="Empty" uuid="6633631d-73fe-4deb-a82b-c8bf0b00a548">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="cerezas"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="productora" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT IF(v.especie='Prunus avium', 'Dulces', 'Ácidas') tipo, v.preco, v.nombre cereza, c.calibre, v.descrip
+FROM fah_cultivos c, fah_variedadescrz v
+WHERE c.id_prod = $P{productora} AND v.id = c.id_crz
+ORDER BY v.especie, v.preco]]>
+	</queryString>
+	<field name="tipo" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="tipo"/>
+		<property name="com.jaspersoft.studio.field.label" value="tipo"/>
+	</field>
+	<field name="preco" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="preco"/>
+		<property name="com.jaspersoft.studio.field.label" value="preco"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_variedadescrz"/>
+	</field>
+	<field name="cereza" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.label" value="cereza"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_variedadescrz"/>
+	</field>
+	<field name="calibre" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="calibre"/>
+		<property name="com.jaspersoft.studio.field.label" value="calibre"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_cultivos"/>
+	</field>
+	<field name="descrip" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="descrip"/>
+		<property name="com.jaspersoft.studio.field.label" value="descrip"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_variedadescrz"/>
+	</field>
+	<group name="Group1">
+		<groupExpression><![CDATA[$F{tipo}]]></groupExpression>
+		<groupHeader>
+			<band height="30">
+				<textField>
+					<reportElement mode="Opaque" x="0" y="10" width="555" height="20" forecolor="#FFFFFF" backcolor="#DD5353" uuid="5fb82a88-566a-4238-8bbd-fa6683b39e9c"/>
+					<box leftPadding="5"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Book Antiqua" size="14" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{tipo}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="grpPreco">
+		<groupExpression><![CDATA[$F{preco}]]></groupExpression>
+		<groupHeader>
+			<band height="29">
+				<textField>
+					<reportElement x="0" y="10" width="554" height="19" uuid="28b0751a-7ee8-4a70-afc9-b4a81e2b01cf"/>
+					<box leftPadding="10"/>
+					<textElement>
+						<font fontName="Book Antiqua" size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{preco}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="555" height="30" forecolor="#FFFFFF" backcolor="#DD5353" uuid="8a05240d-b544-4741-9b96-13a5d9cea2b9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Book Antiqua" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cultivos de cerezas]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<textField>
+				<reportElement x="20" y="10" width="534" height="20" uuid="642647f9-daa4-4c04-b14f-199bcb7bb8be"/>
+				<textElement>
+					<font fontName="Book Antiqua" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cereza} + " " + $F{calibre}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

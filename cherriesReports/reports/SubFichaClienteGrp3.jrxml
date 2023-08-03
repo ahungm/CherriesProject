@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ListaProdXCliente" pageWidth="595" pageHeight="842" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="af002602-f582-45b9-893a-202e10f2252b">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="cerezas"/>
+	<subDataset name="dsLista" uuid="cbdaf2a8-2070-45ce-a74d-c37476dabb97">
+		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Connection"/>
+		<parameter name="ID Empresa Cliente" class="java.lang.Integer"/>
+		<queryString language="SQL">
+			<![CDATA[SELECT 
+	prod.nombre Productora,
+    v.nombre Variedad,
+    v.especie,
+    v.preco, 
+    c.calibre, 
+    p.nombre Pais_Origen,
+    IFNULL (v.descrip, ' ')
+
+FROM 
+	fah_detallescontrato d, 
+    fah_empresasproductoras prod,
+    fah_variedadescrz v,
+	fah_cultivos c, 
+	fah_paises p
+    
+WHERE 
+    d.id_prod_cont = prod.id AND
+    d.id_client_cont =  $P{ID Empresa Cliente} AND
+    d.id_crz_cult =  v.id AND
+    v.id = c.id_crz AND
+    v.id_pais = p.id
+    
+    ORDER BY v.especie, v.preco]]>
+		</queryString>
+		<field name="Productora" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+			<property name="com.jaspersoft.studio.field.label" value="Productora"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="fah_empresasproductoras"/>
+		</field>
+		<field name="Variedad" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+			<property name="com.jaspersoft.studio.field.label" value="Variedad"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="fah_variedadescrz"/>
+		</field>
+		<field name="especie" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="especie"/>
+			<property name="com.jaspersoft.studio.field.label" value="especie"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="fah_variedadescrz"/>
+		</field>
+		<field name="preco" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="preco"/>
+			<property name="com.jaspersoft.studio.field.label" value="preco"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="fah_variedadescrz"/>
+		</field>
+		<field name="calibre" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="calibre"/>
+			<property name="com.jaspersoft.studio.field.label" value="calibre"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="fah_cultivos"/>
+		</field>
+		<field name="Pais_Origen" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+			<property name="com.jaspersoft.studio.field.label" value="Pais_Origen"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="fah_paises"/>
+		</field>
+		<field name="IFNULL (v.descrip, &apos; &apos;)" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name">
+				<![CDATA[IFNULL (v.descrip, ' ')]]>
+			</property>
+			<property name="com.jaspersoft.studio.field.label">
+				<![CDATA[IFNULL (v.descrip, ' ')]]>
+			</property>
+		</field>
+	</subDataset>
+	<parameter name="ID Empresa Cliente" class="java.lang.Integer"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT 
+	prod.nombre Productora,
+    IF(v.especie='Prunus avium', 'dulces', 'ácidas') especie,
+    v.nombre variedad,
+    c.calibre, 
+    v.preco
+FROM 
+    fah_empresasproductoras prod,
+    fah_contratos cont,
+    fah_detallescontrato d, 
+    fah_variedadescrz v,
+	fah_cultivos c, 
+	fah_paises p
+WHERE 
+	cont.id_client = $P{ID Empresa Cliente}  AND cont.estatus ='Activo' AND cont.id = d.id_cont AND
+    d.id_prod_cont = prod.id AND prod.id = c.id_prod AND
+    d.id_cult = c.id AND
+    d.id_crz_cult =  v.id AND
+    v.id = c.id_crz AND
+    v.id_pais = p.id
+ORDER BY v.especie, v.preco]]>
+	</queryString>
+	<field name="Productora" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.label" value="Productora"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_empresasproductoras"/>
+	</field>
+	<field name="especie" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="especie"/>
+		<property name="com.jaspersoft.studio.field.label" value="especie"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_variedadescrz"/>
+	</field>
+	<field name="variedad" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.label" value="variedad"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_variedadescrz"/>
+	</field>
+	<field name="calibre" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="calibre"/>
+		<property name="com.jaspersoft.studio.field.label" value="calibre"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_cultivos"/>
+	</field>
+	<field name="preco" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="preco"/>
+		<property name="com.jaspersoft.studio.field.label" value="preco"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_variedadescrz"/>
+	</field>
+	<group name="grpProd">
+		<groupExpression><![CDATA[$F{Productora}]]></groupExpression>
+		<groupHeader>
+			<band height="29">
+				<textField>
+					<reportElement mode="Opaque" x="0" y="11" width="555" height="18" forecolor="#FFFFFF" backcolor="#ED7E7E" uuid="6b4b2305-2416-426e-9edd-815dcedd7055">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<box leftPadding="5"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Book Antiqua" size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Productora}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="grpEspecie">
+		<groupExpression><![CDATA[$F{especie}]]></groupExpression>
+		<groupHeader>
+			<band height="31">
+				<textField>
+					<reportElement mode="Opaque" x="0" y="10" width="555" height="15" forecolor="#FFFFFF" backcolor="#ED7E7E" uuid="efad8a58-7f1d-446c-8fd6-bb58ed8abdc1">
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					</reportElement>
+					<box leftPadding="5"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Book Antiqua" size="10" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Cerezas " + $F{especie}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="grpPreco">
+		<groupExpression><![CDATA[$F{preco}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<textField>
+					<reportElement x="10" y="0" width="545" height="20" uuid="df52fd2b-32c4-4ca2-9aef-722a256b6d47"/>
+					<textElement>
+						<font fontName="Book Antiqua" size="10" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{preco}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="60">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="40" width="555" height="20" forecolor="#FFFFFF" backcolor="#ED7E7E" uuid="2b720c6a-e5b1-4212-82e5-a9a72d3309d7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Book Antiqua" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Lista de Productores de Importación]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="555" height="30" forecolor="#FFFFFF" backcolor="#DD5353" uuid="cd7da5f3-1774-41d5-a9d5-d131e17aa6da"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Book Antiqua" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Datos Comerciales]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="20">
+			<textField>
+				<reportElement x="20" y="0" width="535" height="20" uuid="8140e98b-c968-4ae6-bd86-d1950b150c1d"/>
+				<textElement>
+					<font fontName="Book Antiqua"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{variedad} + " " + $F{calibre}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

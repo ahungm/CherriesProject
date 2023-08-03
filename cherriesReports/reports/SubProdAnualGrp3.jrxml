@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ProdAnualExport" pageWidth="595" pageHeight="842" whenNoDataType="BlankPage" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" whenResourceMissingType="Empty" uuid="553a113b-1834-42cf-9450-9267226863ed">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="cerezas"/>
+	<parameter name="productora" class="java.lang.Integer"/>
+	<parameter name="año" class="java.lang.Integer"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT dc.ctd cantidad, concat(v.nombre, '  ', cult.calibre) AS cereza, ec.nombre cliente, (pr.precio*dc.ctd- ((pr.precio*dc.ctd*ifnull(c.descuento,0))/100)) comprado
+FROM fah_detallescontrato dc, fah_contratos c, fah_variedadescrz v, fah_cultivos cult, fah_empresasproductoras e, fah_precioscrzpais pr, fah_empresascliente ec
+WHERE 	e.id = $P{productora}  AND c.id_prod = $P{productora}  AND YEAR(c.fe_emi) < $P{año} AND 
+		((c.estatus = 'Activo') OR (YEAR(c.fe_cancel) >= $P{año})) AND dc.id_prod_cont = $P{productora} AND dc.id_cont = c.id AND
+		cult.id_prod = $P{productora}  AND dc.id_cult = cult.id AND dc.id_crz_cult = cult.id_crz AND cult.id_crz = v.id AND
+		cult.id_crz = pr.id_crz AND cult.calibre = pr.calibre AND e.id_pais = pr.id_pais AND
+		YEAR(pr.fe_i) <= $P{año} AND ((isnull(pr.fe_f)) OR (YEAR(pr.fe_f) > $P{año})) AND
+		ec.id = c.id_client]]>
+	</queryString>
+	<field name="cantidad" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="ctd"/>
+		<property name="com.jaspersoft.studio.field.label" value="cantidad"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_detallescontrato"/>
+	</field>
+	<field name="cereza" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="cereza"/>
+		<property name="com.jaspersoft.studio.field.label" value="cereza"/>
+	</field>
+	<field name="cliente" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.label" value="cliente"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_empresascliente"/>
+	</field>
+	<field name="comprado" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="comprado"/>
+		<property name="com.jaspersoft.studio.field.label" value="comprado"/>
+	</field>
+	<variable name="sumCerezas" class="java.math.BigDecimal" resetType="Group" resetGroup="grpCereza" calculation="Sum">
+		<variableExpression><![CDATA[$F{comprado}]]></variableExpression>
+	</variable>
+	<group name="grpCereza">
+		<groupExpression><![CDATA[$F{cereza}]]></groupExpression>
+		<groupHeader>
+			<band height="69">
+				<textField>
+					<reportElement mode="Transparent" x="0" y="10" width="299" height="20" backcolor="#9C1463" uuid="5423c7d1-d919-4535-acbf-de71a1679357"/>
+					<box>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Book Antiqua" size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{cereza}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="184" y="30" width="183" height="39" uuid="0d37f383-35a2-4535-b01a-3fe05307aaaa"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Book Antiqua" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Cantidad solicitada]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="367" y="30" width="183" height="39" uuid="3d16e3b6-c53f-418f-a373-9d8caa9e49cd"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Book Antiqua" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Monto]]></text>
+				</staticText>
+				<textField evaluationTime="Group" evaluationGroup="grpCereza" pattern="Total vendido #,##0.00# $;Total vendido (#,##0.00#-) $">
+					<reportElement mode="Transparent" x="299" y="10" width="251" height="20" backcolor="#9C1463" uuid="d1663821-3d32-4bbb-af88-9a11e57cbcb7"/>
+					<box>
+						<bottomPen lineWidth="0.75"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Book Antiqua" size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{sumCerezas}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="0" y="30" width="184" height="39" uuid="d5ce412f-1b6d-4152-b03a-9d059d3999de"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Book Antiqua" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Empresa]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="24">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="550" height="24" forecolor="#FFFFFF" backcolor="#C70039" uuid="c6c63dff-42ed-4279-85bb-757a7fe4c2a0"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+					<pen lineStyle="Double"/>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Book Antiqua" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Detalles de exportacion]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<frame>
+				<reportElement x="0" y="0" width="550" height="20" uuid="8b1726e6-562a-49df-a8d2-c5a29f6e9660">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.HorizontalRowLayout"/>
+				</reportElement>
+				<textField>
+					<reportElement x="0" y="0" width="184" height="20" uuid="468fae87-9e97-4331-91c9-8547b8864bed"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Book Antiqua" size="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{cliente}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00# kg;(#,##0.00#-) kg">
+					<reportElement x="184" y="0" width="183" height="20" uuid="f2415b34-63b0-43ca-aa89-6e7d6ebb420f"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Book Antiqua" size="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00# $;(#,##0.00#-) $">
+					<reportElement x="367" y="0" width="183" height="20" uuid="f9dcfeea-1e8b-4e5b-a8ad-a0026280dd1d"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Book Antiqua" size="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{comprado}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</detail>
+	<lastPageFooter>
+		<band height="509">
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" x="451" y="410" width="99" height="20" uuid="050f2293-5d0f-4ba8-bc99-a0d2a77e9362"/>
+				<textElement textAlignment="Right">
+					<font fontName="Book Antiqua" size="10"/>
+				</textElement>
+				<text><![CDATA[Reporte realizado por:]]></text>
+			</staticText>
+			<textField pattern="M/d/yy">
+				<reportElement positionType="FixRelativeToBottom" x="501" y="490" width="50" height="19" uuid="82c01618-aa4e-43e7-8a12-9f158216e470"/>
+				<textElement textAlignment="Right">
+					<font fontName="Book Antiqua" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement positionType="FixRelativeToBottom" mode="Opaque" x="1" y="480" width="549" height="2" backcolor="#ADAAAA" uuid="a5141aa7-203f-45f8-80d2-1c2a435970af">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" x="481" y="430" width="70" height="40" uuid="99fea94a-0a3b-48e2-9177-b6757e5d9b8e"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Book Antiqua" size="10"/>
+				</textElement>
+				<text><![CDATA[Arturo Hung
+Javier Molina
+Francis Bompart]]></text>
+			</staticText>
+		</band>
+	</lastPageFooter>
+</jasperReport>

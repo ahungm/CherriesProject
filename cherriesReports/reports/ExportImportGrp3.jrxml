@@ -1,0 +1,975 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="exportimport" pageWidth="595" pageHeight="842" whenNoDataType="BlankPage" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Empty" uuid="f471761e-c8f3-467c-ae1c-ba7f882189b7">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="cerezas"/>
+	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_CH" mode="Opaque" backcolor="#DD5353">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_TD" mode="Opaque" backcolor="#DD5353">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 1_CH" mode="Opaque" backcolor="#DD5353">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 1_TD" mode="Opaque" backcolor="#DD5353">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="dsExport" uuid="1e48a22f-792f-48c2-bd23-5792c642438e">
+		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="cerezas"/>
+		<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="382"/>
+		<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="613"/>
+		<parameter name="año" class="java.lang.Integer"/>
+		<queryString language="SQL">
+			<![CDATA[SELECT p.continent continente, p.nombre pais, e.nombre empresa, sum(er.cantidad/1000) cantidad, sum((pr.precio*er.cantidad)-((pr.precio*er.cantidad*ifnull(c.descuento,0))/100)) ganancia
+FROM fah_paises p, fah_empresasproductoras e, fah_contratos c, fah_enviosreales er, fah_cultivos cult, fah_precioscrzpais pr
+WHERE   p.id = e.id_pais AND e.id = c.id_prod AND e.id = er.id_prod_cont AND c.id = er.id_cont AND
+		YEAR(er.fe_env) = $P{año} AND
+		cult.id_prod = e.id AND er.id_cult = cult.id AND er.id_crz_cult = cult.id_crz AND
+		cult.id_crz = pr.id_crz AND cult.calibre = pr.calibre AND e.id_pais = pr.id_pais AND
+		YEAR(pr.fe_i) <= $P{año} AND ((NOT (pr.fe_f IS NOT NULL)) OR (YEAR(pr.fe_f) > $P{año}))
+GROUP BY p.continent, p.nombre, e.id
+ORDER BY p.continent, p.nombre]]>
+		</queryString>
+		<field name="continente" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="continent"/>
+			<property name="com.jaspersoft.studio.field.label" value="continente"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="fah_paises"/>
+		</field>
+		<field name="pais" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+			<property name="com.jaspersoft.studio.field.label" value="pais"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="fah_paises"/>
+		</field>
+		<field name="empresa" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+			<property name="com.jaspersoft.studio.field.label" value="empresa"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="fah_empresasproductoras"/>
+		</field>
+		<field name="cantidad" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.name" value="cantidad"/>
+			<property name="com.jaspersoft.studio.field.label" value="cantidad"/>
+		</field>
+		<field name="ganancia" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.name" value="ganancia"/>
+			<property name="com.jaspersoft.studio.field.label" value="ganancia"/>
+		</field>
+	</subDataset>
+	<subDataset name="dsImport" whenResourceMissingType="Empty" uuid="f57c13bb-069f-466c-8e42-db99eceec152">
+		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="cerezas"/>
+		<parameter name="año" class="java.lang.Integer"/>
+		<queryString language="SQL">
+			<![CDATA[SELECT p.continent continente, p.nombre pais, ec.nombre empresa, sum(er.cantidad/1000) cantidad, sum((pr.precio*er.cantidad)-((pr.precio*er.cantidad*ifnull(c.descuento,0))/100)) ganancia
+FROM fah_paises p, fah_empresasproductoras e, fah_empresascliente ec, fah_contratos c, fah_enviosreales er, fah_cultivos cult, fah_precioscrzpais pr
+WHERE p.id = ec.id_pais AND
+	  ec.id = c.id_client AND
+      e.id = c.id_prod AND
+      er.id_cont = c.id AND 
+      YEAR(er.fe_env) = $P{año} AND
+      cult.id_prod = e.id AND er.id_cult = cult.id AND er.id_crz_cult = cult.id_crz AND
+      cult.id_crz = pr.id_crz AND cult.calibre = pr.calibre AND e.id_pais = pr.id_pais AND
+      (YEAR(pr.fe_i) <= $P{año}) AND ((YEAR(pr.fe_f) > $P{año}) OR (NOT (pr.fe_f IS NOT NULL)))
+GROUP BY p.continent, p.nombre, ec.id
+ORDER BY p.continent, p.nombre]]>
+		</queryString>
+		<field name="continente" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="continent"/>
+			<property name="com.jaspersoft.studio.field.label" value="continente"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="fah_paises"/>
+		</field>
+		<field name="pais" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+			<property name="com.jaspersoft.studio.field.label" value="pais"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="fah_paises"/>
+		</field>
+		<field name="empresa" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+			<property name="com.jaspersoft.studio.field.label" value="empresa"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="fah_empresascliente"/>
+		</field>
+		<field name="cantidad" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.name" value="cantidad"/>
+			<property name="com.jaspersoft.studio.field.label" value="cantidad"/>
+		</field>
+		<field name="ganancia" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.name" value="ganancia"/>
+			<property name="com.jaspersoft.studio.field.label" value="ganancia"/>
+		</field>
+	</subDataset>
+	<subDataset name="dsExportGraph" whenResourceMissingType="Empty" uuid="eb6b1bf8-93d8-4475-8538-5bcdfe6af889">
+		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="cerezas"/>
+		<parameter name="año" class="java.lang.Integer"/>
+		<queryString language="SQL">
+			<![CDATA[SELECT p.nombre pais, sum(er.cantidad/1000) cantidad, sum((pr.precio*er.cantidad)-((pr.precio*er.cantidad*ifnull(c.descuento,0))/100)) ganancia
+FROM fah_paises p, fah_empresasproductoras e, fah_contratos c, fah_enviosreales er, fah_cultivos cult, fah_precioscrzpais pr
+WHERE   p.id = e.id_pais AND e.id = c.id_prod AND e.id = er.id_prod_cont AND c.id = er.id_cont AND
+		YEAR(er.fe_env) = $P{año} AND
+		cult.id_prod = e.id AND er.id_cult = cult.id AND er.id_crz_cult = cult.id_crz AND
+		cult.id_crz = pr.id_crz AND cult.calibre = pr.calibre AND e.id_pais = pr.id_pais AND
+		YEAR(pr.fe_i) <= $P{año} AND ((NOT (pr.fe_f IS NOT NULL)) OR (YEAR(pr.fe_f) > $P{año}))
+GROUP BY p.nombre
+ORDER BY p.nombre]]>
+		</queryString>
+		<field name="pais" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+			<property name="com.jaspersoft.studio.field.label" value="pais"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="fah_paises"/>
+		</field>
+		<field name="cantidad" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.name" value="cantidad"/>
+			<property name="com.jaspersoft.studio.field.label" value="cantidad"/>
+		</field>
+		<field name="ganancia" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.name" value="ganancia"/>
+			<property name="com.jaspersoft.studio.field.label" value="ganancia"/>
+		</field>
+	</subDataset>
+	<subDataset name="dsImportGraph" whenResourceMissingType="Empty" uuid="683d24e4-e1aa-4e86-a465-9a55567deac6">
+		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="cerezas"/>
+		<parameter name="año" class="java.lang.Integer"/>
+		<queryString language="SQL">
+			<![CDATA[SELECT p.nombre pais, sum(er.cantidad/1000) cantidad, sum((pr.precio*er.cantidad)-((pr.precio*er.cantidad*ifnull(c.descuento,0))/100)) ganancia
+FROM fah_paises p, fah_empresasproductoras e, fah_empresascliente ec, fah_contratos c, fah_enviosreales er, fah_cultivos cult, fah_precioscrzpais pr
+WHERE p.id = ec.id_pais AND
+	  ec.id = c.id_client AND
+      e.id = c.id_prod AND
+      er.id_cont = c.id AND 
+      YEAR(er.fe_env) = $P{año}  AND
+      cult.id_prod = e.id AND er.id_cult = cult.id AND er.id_crz_cult = cult.id_crz AND
+      cult.id_crz = pr.id_crz AND cult.calibre = pr.calibre AND e.id_pais = pr.id_pais AND
+      (YEAR(pr.fe_i) <= $P{año}) AND ((YEAR(pr.fe_f) > $P{año}) OR (NOT (pr.fe_f IS NOT NULL)))
+GROUP BY p.nombre
+ORDER BY p.nombre]]>
+		</queryString>
+		<field name="pais" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+			<property name="com.jaspersoft.studio.field.label" value="pais"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="fah_paises"/>
+		</field>
+		<field name="cantidad" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.name" value="cantidad"/>
+			<property name="com.jaspersoft.studio.field.label" value="cantidad"/>
+		</field>
+		<field name="ganancia" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.name" value="ganancia"/>
+			<property name="com.jaspersoft.studio.field.label" value="ganancia"/>
+		</field>
+	</subDataset>
+	<parameter name="año" class="java.lang.Integer"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT e.id_cont
+FROM fah_enviosreales e 
+WHERE YEAR(e.fe_env) = $P{año}]]>
+	</queryString>
+	<field name="id_cont" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="id_cont"/>
+		<property name="com.jaspersoft.studio.field.label" value="id_cont"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_enviosreales"/>
+	</field>
+	<group name="Group1" keepTogether="true">
+		<groupHeader>
+			<band height="313">
+				<frame>
+					<reportElement x="-10" y="50" width="569" height="263" uuid="ff39fbba-9967-4240-adde-6379df486311">
+						<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.HorizontalRowLayout"/>
+					</reportElement>
+					<barChart>
+						<chart evaluationTime="Report">
+							<reportElement stretchType="ContainerHeight" x="0" y="0" width="285" height="263" uuid="476ff3b4-f883-4d7a-aa57-ce2dfa844307"/>
+							<chartTitle/>
+							<chartSubtitle/>
+							<chartLegend>
+								<font fontName="Book Antiqua" size="8" isBold="true"/>
+							</chartLegend>
+						</chart>
+						<categoryDataset>
+							<dataset resetType="Report">
+								<datasetRun subDataset="dsExportGraph" uuid="b1d96a25-3247-4504-9c86-ff1a789cca7f">
+									<datasetParameter name="año">
+										<datasetParameterExpression><![CDATA[$P{año}]]></datasetParameterExpression>
+									</datasetParameter>
+								</datasetRun>
+							</dataset>
+							<categorySeries>
+								<seriesExpression><![CDATA["Exportación"]]></seriesExpression>
+								<categoryExpression><![CDATA[$F{pais}]]></categoryExpression>
+								<valueExpression><![CDATA[$F{cantidad}]]></valueExpression>
+							</categorySeries>
+						</categoryDataset>
+						<barPlot isShowLabels="true" isShowTickLabels="true" isShowTickMarks="true">
+							<plot>
+								<seriesColor seriesOrder="0" color="#381460"/>
+							</plot>
+							<itemLabel>
+								<font fontName="Book Antiqua" size="8"/>
+							</itemLabel>
+							<categoryAxisLabelExpression><![CDATA["País"]]></categoryAxisLabelExpression>
+							<categoryAxisFormat>
+								<axisFormat labelColor="#000000" tickLabelColor="#000000" axisLineColor="#000000">
+									<labelFont>
+										<font fontName="Book Antiqua" size="8"/>
+									</labelFont>
+									<tickLabelFont>
+										<font fontName="Book Antiqua" size="8"/>
+									</tickLabelFont>
+								</axisFormat>
+							</categoryAxisFormat>
+							<valueAxisLabelExpression><![CDATA["Toneladas (t)"]]></valueAxisLabelExpression>
+							<valueAxisFormat>
+								<axisFormat labelColor="#000000" tickLabelColor="#000000" axisLineColor="#000000">
+									<labelFont>
+										<font fontName="Book Antiqua" size="8"/>
+									</labelFont>
+									<tickLabelFont>
+										<font fontName="Book Antiqua" size="8"/>
+									</tickLabelFont>
+								</axisFormat>
+							</valueAxisFormat>
+						</barPlot>
+					</barChart>
+					<barChart>
+						<chart evaluationTime="Report">
+							<reportElement x="285" y="0" width="284" height="263" uuid="787697c7-d3f9-45de-b95a-5224f5df7988"/>
+							<chartTitle/>
+							<chartSubtitle/>
+							<chartLegend>
+								<font fontName="Book Antiqua" size="8" isBold="true"/>
+							</chartLegend>
+						</chart>
+						<categoryDataset>
+							<dataset resetType="Report">
+								<datasetRun subDataset="dsExportGraph" uuid="b44b0c58-1852-4c06-b2ba-feb5fa10481b">
+									<datasetParameter name="año">
+										<datasetParameterExpression><![CDATA[$P{año}]]></datasetParameterExpression>
+									</datasetParameter>
+								</datasetRun>
+							</dataset>
+							<categorySeries>
+								<seriesExpression><![CDATA["Ganancia"]]></seriesExpression>
+								<categoryExpression><![CDATA[$F{pais}]]></categoryExpression>
+								<valueExpression><![CDATA[$F{ganancia}]]></valueExpression>
+							</categorySeries>
+						</categoryDataset>
+						<barPlot isShowLabels="true" isShowTickLabels="true" isShowTickMarks="true">
+							<plot>
+								<seriesColor seriesOrder="0" color="#721B65"/>
+							</plot>
+							<itemLabel>
+								<font fontName="Book Antiqua" size="8"/>
+							</itemLabel>
+							<categoryAxisLabelExpression><![CDATA["País"]]></categoryAxisLabelExpression>
+							<categoryAxisFormat>
+								<axisFormat labelColor="#000000" tickLabelColor="#000000" axisLineColor="#000000">
+									<labelFont>
+										<font fontName="Book Antiqua" size="8"/>
+									</labelFont>
+									<tickLabelFont>
+										<font fontName="Book Antiqua" size="8"/>
+									</tickLabelFont>
+								</axisFormat>
+							</categoryAxisFormat>
+							<valueAxisLabelExpression><![CDATA["Dólares ($)"]]></valueAxisLabelExpression>
+							<valueAxisFormat>
+								<axisFormat labelColor="#000000" tickLabelColor="#000000" axisLineColor="#000000">
+									<labelFont>
+										<font fontName="Book Antiqua" size="8"/>
+									</labelFont>
+									<tickLabelFont>
+										<font fontName="Book Antiqua" size="8"/>
+									</tickLabelFont>
+								</axisFormat>
+							</valueAxisFormat>
+						</barPlot>
+					</barChart>
+				</frame>
+				<staticText>
+					<reportElement x="30" y="20" width="245" height="30" uuid="3c67746e-5605-4411-9a5d-910fca051726"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Book Antiqua" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Exportación de cerezas por país]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="300" y="20" width="258" height="30" uuid="3dacf915-16a3-43e5-b97e-5f376e6d900d"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Book Antiqua" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Ingreso en exportacion de cerezas por país]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="119">
+				<staticText>
+					<reportElement mode="Opaque" x="-11" y="31" width="569" height="20" forecolor="#FFFFFF" backcolor="#C70039" uuid="1b5f3fdc-e95f-4613-a8c0-91ad1cefa985"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Book Antiqua" size="14" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Importación]]></text>
+				</staticText>
+				<componentElement>
+					<reportElement key="" mode="Opaque" x="-11" y="60" width="569" height="59" forecolor="#FFFFFF" backcolor="#C70039" uuid="61522026-50bb-4f5c-ac8b-4c0b385023da">
+						<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.HorizontalRowLayout"/>
+						<property name="com.jaspersoft.studio.table.style.table_header" value="Table 1_TH"/>
+						<property name="com.jaspersoft.studio.table.style.column_header" value="Table 1_CH"/>
+						<property name="com.jaspersoft.studio.table.style.detail" value="Table 1_TD"/>
+					</reportElement>
+					<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" whenNoDataType="Blank">
+						<datasetRun subDataset="dsImport" uuid="7ce2a203-9467-48ba-bdbe-a0e7216fb9ab">
+							<datasetParameter name="año">
+								<datasetParameterExpression><![CDATA[$P{año}]]></datasetParameterExpression>
+							</datasetParameter>
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+						<jr:column width="90" uuid="40d6e06e-e78d-4795-9261-6b10a73283d6">
+							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
+							<jr:columnHeader style="Table 1_CH" height="30">
+								<box>
+									<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								</box>
+								<staticText>
+									<reportElement x="0" y="0" width="90" height="30" forecolor="#FFFFFF" uuid="a7f4a9ec-e503-4b21-b40c-aa0f207f1acb"/>
+									<box leftPadding="5"/>
+									<textElement textAlignment="Left" verticalAlignment="Middle">
+										<font fontName="Book Antiqua" size="14" isBold="true"/>
+									</textElement>
+									<text><![CDATA[Continente]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="Table 1_TD" height="30">
+								<box>
+									<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								</box>
+								<textField>
+									<reportElement isPrintRepeatedValues="false" x="0" y="0" width="90" height="30" forecolor="#FFFFFF" uuid="57b51c1d-1bc0-4dbb-9cd9-8e3c8703a8d2"/>
+									<box leftPadding="5"/>
+									<textElement textAlignment="Left" verticalAlignment="Middle">
+										<font fontName="Book Antiqua" size="14" isBold="true"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$F{continente}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="110" uuid="37fa0646-dc4e-4d10-bd80-a551e4eca354">
+							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
+							<jr:columnHeader style="Table 1_CH" height="30">
+								<box>
+									<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								</box>
+								<staticText>
+									<reportElement x="0" y="0" width="110" height="30" forecolor="#FFFFFF" uuid="81a65ac9-2846-4d1b-802c-b1fcb43a9c41"/>
+									<box leftPadding="5"/>
+									<textElement textAlignment="Left" verticalAlignment="Middle">
+										<font fontName="Book Antiqua" size="14" isBold="true"/>
+									</textElement>
+									<text><![CDATA[País]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="Table 1_TD" height="30">
+								<box>
+									<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								</box>
+								<textField>
+									<reportElement isPrintRepeatedValues="false" x="0" y="0" width="110" height="30" forecolor="#FFFFFF" uuid="6da74a47-50c4-4655-bb45-d639ab616817"/>
+									<box leftPadding="5" rightPadding="3"/>
+									<textElement textAlignment="Left" verticalAlignment="Middle">
+										<font fontName="Book Antiqua" size="14" isBold="true"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$F{pais}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="180" uuid="3ad210f9-088a-47e7-a21a-438277fe588f">
+							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
+							<jr:columnHeader style="Table 1_CH" height="30">
+								<box>
+									<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								</box>
+								<staticText>
+									<reportElement mode="Opaque" x="0" y="0" width="180" height="30" forecolor="#FFFFFF" backcolor="#C70039" uuid="92331ea1-884e-4978-b207-3741f64a524b"/>
+									<box>
+										<pen lineWidth="0.1"/>
+										<topPen lineWidth="0.1" lineStyle="Solid" lineColor="#FFFFFF"/>
+										<leftPen lineWidth="6.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+										<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+										<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									</box>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font fontName="Book Antiqua" size="14" isBold="true"/>
+									</textElement>
+									<text><![CDATA[Empresa]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="Table 1_TD" height="30">
+								<box>
+									<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								</box>
+								<textField>
+									<reportElement mode="Opaque" x="0" y="0" width="180" height="30" forecolor="#000000" backcolor="#FFFFFF" uuid="31c879bf-702e-4f11-b719-5b156f36f90c"/>
+									<box leftPadding="2" rightPadding="2">
+										<topPen lineWidth="0.1" lineColor="#FFFFFF"/>
+										<leftPen lineWidth="6.0" lineColor="#FFFFFF"/>
+									</box>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font fontName="Book Antiqua" size="12"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$F{empresa}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="100" uuid="a023798c-91cf-43b6-9a3f-713e7dc2274f">
+							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column4"/>
+							<jr:columnHeader style="Table 1_CH" height="30">
+								<box>
+									<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								</box>
+								<staticText>
+									<reportElement mode="Opaque" x="0" y="0" width="100" height="30" forecolor="#FFFFFF" backcolor="#C70039" uuid="0a4d5cb6-859a-4570-a833-b0f88fed6028"/>
+									<box>
+										<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+										<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+										<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+										<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									</box>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font fontName="Book Antiqua" size="14" isBold="true"/>
+									</textElement>
+									<text><![CDATA[Cantidad (t)]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="Table 1_TD" height="30">
+								<box>
+									<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								</box>
+								<textField pattern="#,##0.00#;(#,##0.00#-)">
+									<reportElement mode="Opaque" x="0" y="0" width="100" height="30" forecolor="#000000" backcolor="#FFFFFF" uuid="1f9f4239-fe09-4022-8975-93874fdeee3f"/>
+									<box leftPadding="2" rightPadding="2"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font fontName="Book Antiqua" size="12"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="89" uuid="78a2a675-49d6-4694-906b-9ea12922cbbe">
+							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column5"/>
+							<jr:columnHeader style="Table 1_CH" height="30">
+								<box>
+									<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								</box>
+								<staticText>
+									<reportElement mode="Opaque" x="0" y="0" width="89" height="30" forecolor="#FFFFFF" backcolor="#C70039" uuid="63f5edf2-c3ab-4bdc-af14-357a33e3f4e5"/>
+									<box>
+										<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+										<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+										<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+										<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									</box>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font fontName="Book Antiqua" size="14" isBold="true"/>
+									</textElement>
+									<text><![CDATA[Comprado]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="Table 1_TD" height="30">
+								<box>
+									<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								</box>
+								<textField pattern="#,##0.00# $;(#,##0.00#-) $">
+									<reportElement mode="Opaque" x="0" y="0" width="89" height="30" forecolor="#000000" backcolor="#FFFFFF" uuid="4f5e9331-2d1d-4638-8160-fca83787938b"/>
+									<box leftPadding="2" rightPadding="2"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font fontName="Book Antiqua" size="12"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$F{ganancia}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+					</jr:table>
+				</componentElement>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="180" splitType="Stretch">
+			<textField>
+				<reportElement x="-10" y="10" width="569" height="62" uuid="f55e244d-abd7-4a27-a8e7-097d62e9ec98"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Book Antiqua" size="19" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Mercado Global de Cerezas\nAño " + $P{año}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Opaque" x="-8" y="90" width="569" height="20" forecolor="#FFFFFF" backcolor="#C70039" uuid="17f843a8-cbf2-4bfe-b6c1-5418ccde3030"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Book Antiqua" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Exportación]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement mode="Opaque" x="-8" y="120" width="570" height="60" forecolor="#000000" backcolor="#FFFFFF" uuid="8b151f80-30a8-4e38-9b0a-8baa72475c9a">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+					<property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
+					<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
+					<property name="com.jaspersoft.studio.table.style.detail" value="Table_TD"/>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" whenNoDataType="Blank">
+					<datasetRun subDataset="dsExport" uuid="d02a91bb-4ba7-4de7-8787-a5a4f27571c7">
+						<datasetParameter name="año">
+							<datasetParameterExpression><![CDATA[$P{año}]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="90" uuid="05bda58f-f40a-4b4a-8f51-11aa667ff957">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
+						<jr:columnHeader style="Table_CH" height="30">
+							<box>
+								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" forecolor="#FFFFFF" uuid="5e44ff2e-b19d-4f19-88c5-1e3ddb0b5a14"/>
+								<box leftPadding="5"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle">
+									<font fontName="Book Antiqua" size="14" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Continente]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<box>
+								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textField>
+								<reportElement isPrintRepeatedValues="false" mode="Transparent" x="0" y="0" width="90" height="30" isRemoveLineWhenBlank="true" forecolor="#FFFFFF" backcolor="#E3E3E3" uuid="bb37f6c2-78af-4903-b9bf-8540c05c3bc6"/>
+								<box leftPadding="5">
+									<pen lineColor="#FFFFFF"/>
+									<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#C70039"/>
+									<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+									<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+									<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+								</box>
+								<textElement textAlignment="Left" verticalAlignment="Middle">
+									<font fontName="Book Antiqua" size="14" isBold="true"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{continente}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="110" uuid="edfddd53-9db5-41ca-b108-11b47f24545e">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
+						<jr:columnHeader style="Table_CH" height="30">
+							<box>
+								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<staticText>
+								<reportElement x="0" y="0" width="110" height="30" forecolor="#FFFFFF" uuid="d8ebe4ff-9e01-460b-a326-f5d40f8c45c4"/>
+								<box leftPadding="5">
+									<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								</box>
+								<textElement textAlignment="Left" verticalAlignment="Middle">
+									<font fontName="Book Antiqua" size="14" isBold="true"/>
+								</textElement>
+								<text><![CDATA[País]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+							<box>
+								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textField>
+								<reportElement isPrintRepeatedValues="false" mode="Transparent" x="0" y="0" width="110" height="30" forecolor="#FFFFFF" uuid="56168192-d981-4aad-8e1d-f9379bc40981"/>
+								<box leftPadding="5">
+									<pen lineWidth="1.75"/>
+									<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								</box>
+								<textElement textAlignment="Left" verticalAlignment="Middle">
+									<font fontName="Book Antiqua" size="14" isBold="true"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{pais}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="180" uuid="c6ecd248-85d5-4fd2-9371-04f4cefdbd49">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
+						<jr:columnHeader style="Table_CH" height="30">
+							<box>
+								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<staticText>
+								<reportElement mode="Opaque" x="0" y="0" width="180" height="30" forecolor="#FFFFFF" backcolor="#C70039" uuid="11ca062a-e462-45fd-9523-c8cdcc524439"/>
+								<box>
+									<topPen lineWidth="0.1"/>
+									<leftPen lineWidth="6.0" lineColor="#FFFFFF"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Book Antiqua" size="14" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Empresa]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<box>
+								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textField>
+								<reportElement mode="Opaque" x="0" y="0" width="180" height="30" forecolor="#000000" backcolor="#FFFFFF" uuid="c3a20c58-e848-44c6-b782-b82b9ac0f7e9"/>
+								<box>
+									<pen lineWidth="6.0"/>
+									<topPen lineWidth="0.1" lineStyle="Solid" lineColor="#FFFFFF"/>
+									<leftPen lineWidth="6.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+									<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+									<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Book Antiqua" size="12"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{empresa}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="100" uuid="c76c1714-218a-4f3e-8511-c531b560751e">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column4"/>
+						<jr:columnHeader style="Table_CH" height="30">
+							<box>
+								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<staticText>
+								<reportElement mode="Opaque" x="0" y="0" width="100" height="30" forecolor="#FFFFFF" backcolor="#C70039" uuid="6c14ae7e-50fd-4555-b9fe-10929a2d1673"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Book Antiqua" size="14" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Cantidad (t)]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<box>
+								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textField pattern="#,##0.00#;(#,##0.00#-)">
+								<reportElement mode="Opaque" x="0" y="0" width="100" height="30" forecolor="#000000" backcolor="#FFFFFF" uuid="62cdb185-4b33-4999-b665-b354e124aa3e"/>
+								<box>
+									<topPen lineColor="#C70039"/>
+									<leftPen lineColor="#FFFCFC"/>
+									<bottomPen lineColor="#FFFCFC"/>
+									<rightPen lineColor="#FFFCFC"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Book Antiqua" size="12"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="89" uuid="61fa6d27-683f-4e6c-a871-a6aa33160cb6">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column5"/>
+						<jr:columnHeader style="Table_CH" height="30">
+							<box>
+								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<staticText>
+								<reportElement mode="Opaque" x="0" y="0" width="89" height="30" forecolor="#FFFFFF" backcolor="#C70039" uuid="9ebfc8b6-6e5c-431c-bde7-851c514065f9"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Book Antiqua" size="14" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Vendido]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<box>
+								<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+								<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textField pattern="#,##0.00# $;(#,##0.00#-) $">
+								<reportElement mode="Opaque" x="0" y="0" width="89" height="30" forecolor="#000000" backcolor="#FFFFFF" uuid="bff1ca6e-cc6b-451e-a841-9cb74704140a"/>
+								<box>
+									<topPen lineColor="#C70039"/>
+									<leftPen lineColor="#FFFFFF"/>
+									<bottomPen lineColor="#FFFFFF"/>
+									<rightPen lineColor="#FFFFFF"/>
+								</box>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Book Antiqua" size="12"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{ganancia}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</title>
+	<lastPageFooter>
+		<band height="99">
+			<staticText>
+				<reportElement x="450" y="0" width="107" height="20" uuid="4e370f4a-0e21-471f-a2ec-489e92ae5203"/>
+				<textElement textAlignment="Right">
+					<font fontName="Book Antiqua" size="10"/>
+				</textElement>
+				<text><![CDATA[Reporte realizado por:]]></text>
+			</staticText>
+			<textField pattern="M/d/yy">
+				<reportElement x="500" y="80" width="58" height="19" uuid="c6622361-823b-431c-a85a-8715b720c7e6"/>
+				<textElement textAlignment="Right">
+					<font fontName="Book Antiqua" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement mode="Opaque" x="-240" y="70" width="797" height="1" backcolor="#ADAAAA" uuid="467272ed-3bde-4986-bb5d-7d83f02651ed">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="480" y="20" width="78" height="40" uuid="b6fa8789-5a66-4610-91ab-52ace3ab4ada"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Book Antiqua" size="10"/>
+				</textElement>
+				<text><![CDATA[Arturo Hung
+Javier Molina
+Francis Bompart]]></text>
+			</staticText>
+		</band>
+	</lastPageFooter>
+	<summary>
+		<band height="330" splitType="Stretch">
+			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+			<frame>
+				<reportElement x="-10" y="60" width="569" height="270" uuid="6173ab6b-ba29-42d8-9125-faca82a4a43b">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.HorizontalRowLayout"/>
+				</reportElement>
+				<barChart>
+					<chart evaluationTime="Report">
+						<reportElement stretchType="ContainerHeight" x="0" y="0" width="285" height="270" uuid="9d594715-b388-4b94-839d-d33faccca025"/>
+						<chartTitle/>
+						<chartSubtitle/>
+						<chartLegend>
+							<font fontName="Book Antiqua" size="8" isBold="true"/>
+						</chartLegend>
+					</chart>
+					<categoryDataset>
+						<dataset resetType="Report">
+							<datasetRun subDataset="dsImportGraph" uuid="be394d70-7b79-4264-98cd-ef3b9f9b5338">
+								<datasetParameter name="año">
+									<datasetParameterExpression><![CDATA[$P{año}]]></datasetParameterExpression>
+								</datasetParameter>
+							</datasetRun>
+						</dataset>
+						<categorySeries>
+							<seriesExpression><![CDATA["Importación"]]></seriesExpression>
+							<categoryExpression><![CDATA[$F{pais}]]></categoryExpression>
+							<valueExpression><![CDATA[$F{cantidad}]]></valueExpression>
+						</categorySeries>
+					</categoryDataset>
+					<barPlot isShowLabels="true" isShowTickLabels="true" isShowTickMarks="true">
+						<plot>
+							<seriesColor seriesOrder="0" color="#381460"/>
+						</plot>
+						<itemLabel>
+							<font fontName="Book Antiqua" size="8"/>
+						</itemLabel>
+						<categoryAxisLabelExpression><![CDATA["País"]]></categoryAxisLabelExpression>
+						<categoryAxisFormat>
+							<axisFormat labelColor="#000000" tickLabelColor="#000000" axisLineColor="#000000">
+								<labelFont>
+									<font fontName="Book Antiqua" size="8"/>
+								</labelFont>
+								<tickLabelFont>
+									<font fontName="Book Antiqua" size="8"/>
+								</tickLabelFont>
+							</axisFormat>
+						</categoryAxisFormat>
+						<valueAxisLabelExpression><![CDATA["Toneladas (t)"]]></valueAxisLabelExpression>
+						<valueAxisFormat>
+							<axisFormat labelColor="#000000" tickLabelColor="#000000" axisLineColor="#000000">
+								<labelFont>
+									<font fontName="Book Antiqua" size="8"/>
+								</labelFont>
+								<tickLabelFont>
+									<font fontName="Book Antiqua" size="8"/>
+								</tickLabelFont>
+							</axisFormat>
+						</valueAxisFormat>
+					</barPlot>
+				</barChart>
+				<barChart>
+					<chart evaluationTime="Report">
+						<reportElement x="285" y="0" width="284" height="270" uuid="d2f2c283-336d-474f-a00c-843e78d2a8c8"/>
+						<chartTitle/>
+						<chartSubtitle/>
+						<chartLegend>
+							<font fontName="Book Antiqua" size="8" isBold="true"/>
+						</chartLegend>
+					</chart>
+					<categoryDataset>
+						<dataset resetType="Report">
+							<datasetRun subDataset="dsImportGraph" uuid="652cad79-19e9-4520-b115-b1afa8c4ae8f">
+								<datasetParameter name="año">
+									<datasetParameterExpression><![CDATA[$P{año}]]></datasetParameterExpression>
+								</datasetParameter>
+							</datasetRun>
+						</dataset>
+						<categorySeries>
+							<seriesExpression><![CDATA["Ganancia"]]></seriesExpression>
+							<categoryExpression><![CDATA[$F{pais}]]></categoryExpression>
+							<valueExpression><![CDATA[$F{ganancia}]]></valueExpression>
+						</categorySeries>
+					</categoryDataset>
+					<barPlot isShowLabels="true" isShowTickLabels="true" isShowTickMarks="true">
+						<plot>
+							<seriesColor seriesOrder="0" color="#721B65"/>
+						</plot>
+						<itemLabel>
+							<font fontName="Book Antiqua" size="8"/>
+						</itemLabel>
+						<categoryAxisLabelExpression><![CDATA["País"]]></categoryAxisLabelExpression>
+						<categoryAxisFormat>
+							<axisFormat labelColor="#000000" tickLabelColor="#000000" axisLineColor="#000000">
+								<labelFont>
+									<font fontName="Book Antiqua" size="8"/>
+								</labelFont>
+								<tickLabelFont>
+									<font fontName="Book Antiqua" size="8"/>
+								</tickLabelFont>
+							</axisFormat>
+						</categoryAxisFormat>
+						<valueAxisLabelExpression><![CDATA["Toneladas (t)"]]></valueAxisLabelExpression>
+						<valueAxisFormat>
+							<axisFormat labelColor="#000000" tickLabelColor="#000000" axisLineColor="#000000">
+								<labelFont>
+									<font fontName="Book Antiqua" size="8"/>
+								</labelFont>
+								<tickLabelFont>
+									<font fontName="Book Antiqua" size="8"/>
+								</tickLabelFont>
+							</axisFormat>
+						</valueAxisFormat>
+					</barPlot>
+				</barChart>
+			</frame>
+			<staticText>
+				<reportElement x="30" y="30" width="245" height="30" uuid="3efb1c20-3f27-4731-b820-40613e629bcd"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Book Antiqua" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Importación de cerezas por país]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="301" y="30" width="258" height="30" uuid="88a7529e-f045-49e8-9728-dd264acf75dc"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Book Antiqua" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Egreso en importacion de cerezas por país]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

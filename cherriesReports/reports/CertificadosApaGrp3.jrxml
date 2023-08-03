@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Certificados_Apadrinamiento" pageWidth="850" pageHeight="550" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="810" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ec4e0789-18c5-47d6-8cc5-11fe6a4aa4df">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="cerezas"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="0"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="1000"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<parameter name="Documento de Identidad" class="java.lang.Integer"/>
+	<parameter name="ID Empresa Productora" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT 
+       per.doc_id,
+       per.nombre1, IFNULL (per.nombre2, ''), 
+	   per.apellido1, IFNULL (per.apellido2, ''),
+       v.nombre, v.especie, v.preco,
+       p.nombre,
+       
+       e.nombre,
+       
+       a.fe_i,
+       IFNULL(concat('Aporte consolidado: ',format(a.aporte, 2), '$'), '') aporte,
+       IFNULL(concat('Fecha fin: ',a.fe_fin), ' ') fin
+
+FROM 
+       fah_personas per, 
+       fah_variedadescrz v,
+       fah_paises p,
+       fah_empresasproductoras e,
+	   fah_apadrinamientos a
+     
+WHERE
+      a.id_per = per.doc_id AND
+      a.id_crz = v.id AND
+      a.id_prod = e.id AND
+      v.id_pais = p.id AND
+      
+      a.id_per =  $P{Documento de Identidad} AND
+      e.id =  $P{ID Empresa Productora}]]>
+	</queryString>
+	<field name="doc_id" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="doc_id"/>
+		<property name="com.jaspersoft.studio.field.label" value="doc_id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_personas"/>
+	</field>
+	<field name="nombre1" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre1"/>
+		<property name="com.jaspersoft.studio.field.label" value="nombre1"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_personas"/>
+	</field>
+	<field name="IFNULL (per.nombre2, &apos;&apos;)" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name">
+			<![CDATA[IFNULL (per.nombre2, '')]]>
+		</property>
+		<property name="com.jaspersoft.studio.field.label">
+			<![CDATA[IFNULL (per.nombre2, '')]]>
+		</property>
+	</field>
+	<field name="apellido1" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="apellido1"/>
+		<property name="com.jaspersoft.studio.field.label" value="apellido1"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_personas"/>
+	</field>
+	<field name="IFNULL (per.apellido2, &apos;&apos;)" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name">
+			<![CDATA[IFNULL (per.apellido2, '')]]>
+		</property>
+		<property name="com.jaspersoft.studio.field.label">
+			<![CDATA[IFNULL (per.apellido2, '')]]>
+		</property>
+	</field>
+	<field name="nombre" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.label" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_variedadescrz"/>
+	</field>
+	<field name="especie" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="especie"/>
+		<property name="com.jaspersoft.studio.field.label" value="especie"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_variedadescrz"/>
+	</field>
+	<field name="preco" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="preco"/>
+		<property name="com.jaspersoft.studio.field.label" value="preco"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_variedadescrz"/>
+	</field>
+	<field name="COLUMN_9" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.label" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_paises"/>
+	</field>
+	<field name="COLUMN_10" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.label" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_empresasproductoras"/>
+	</field>
+	<field name="fe_i" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.name" value="fe_i"/>
+		<property name="com.jaspersoft.studio.field.label" value="fe_i"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_apadrinamientos"/>
+	</field>
+	<field name="aporte" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="aporte"/>
+		<property name="com.jaspersoft.studio.field.label" value="aporte"/>
+	</field>
+	<field name="fin" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="fin"/>
+		<property name="com.jaspersoft.studio.field.label" value="fin"/>
+	</field>
+	<variable name="fullName" class="java.lang.String">
+		<variableDescription><![CDATA[Nombre completo del padrino]]></variableDescription>
+		<variableExpression><![CDATA[$F{nombre1}+" "+$F{IFNULL (per.nombre2, '')}+" "+$F{apellido1}+" "+$F{IFNULL (per.apellido2, '')}]]></variableExpression>
+	</variable>
+	<detail>
+		<band height="451">
+			<image onErrorType="Blank">
+				<reportElement x="0" y="0" width="810" height="451" uuid="30b6e458-4b4b-4345-9e5a-f1a0e0ad2471">
+					<property name="com.jaspersoft.studio.element.name" value="borderImage"/>
+				</reportElement>
+				<imageExpression><![CDATA["C:/Users/franc/Downloads/border.png"]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="251" y="90" width="300" height="300" uuid="a965e3f4-3b89-4c98-9898-fbec84b1b0ed">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.element.name" value="watermarkImage"/>
+				</reportElement>
+				<imageExpression><![CDATA["C:/Users/franc/Downloads/tree.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="100" y="50" width="590" height="40" uuid="6bd78f97-4fe3-4f92-96aa-95e135e3bc4a">
+					<property name="com.jaspersoft.studio.element.name" value="labelTitle"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Book Antiqua" size="30" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CERTIFICADO DE APADRINAMIENTO]]></text>
+			</staticText>
+			<line>
+				<reportElement x="160" y="180" width="480" height="1" uuid="e26230bb-4eb4-4fdb-99f0-492e274d31e1">
+					<property name="com.jaspersoft.studio.element.name" value="lineName"/>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="2.0" lineStyle="Solid" lineColor="#DD5353"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="200" y="197" width="250" height="20" uuid="17a4c5c9-6cbf-4d30-9fab-06ba3e6ed2f7">
+					<property name="com.jaspersoft.studio.element.name" value="labelDocId"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Book Antiqua" size="15" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Titular del documento de identidad]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="160" y="140" width="479" height="40" uuid="a43cdcc6-06af-4178-a5f0-a5cfabaf4579">
+					<property name="com.jaspersoft.studio.element.name" value="varFullName"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="Book Antiqua" size="30" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{fullName}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="450" y="195" width="110" height="25" uuid="4913f575-e1bc-4960-bf51-a73f0c8a09fc">
+					<property name="com.jaspersoft.studio.element.name" value="fieldDocId"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Book Antiqua" size="20" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{doc_id}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="78" y="260" width="635" height="24" uuid="dc14cd49-3ad0-4398-bddb-b94c15dc16ec">
+					<property name="com.jaspersoft.studio.element.name" value="labelProductora"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Book Antiqua" size="16" isBold="false"/>
+				</textElement>
+				<text><![CDATA[asumiendo así el compromiso de conservar y proteger al medio ambiente.]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="84" y="230" width="636" height="30" uuid="0eb5e77e-33db-44d5-85a3-de5216c823f1">
+					<property name="com.jaspersoft.studio.element.name" value="labelCertificate"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Book Antiqua" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Por apadrinar un árbol de cerezo " + $F{nombre} + ", variedad proveniente de " + $F{COLUMN_9}+ ","]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight">
+				<reportElement x="100" y="100" width="590" height="30" uuid="56fbf2eb-1612-42e5-b899-d9b49630ac6b">
+					<property name="com.jaspersoft.studio.element.name" value="fieldProductora"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Book Antiqua" size="20" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{COLUMN_10} + ", reconoce a "]]></textFieldExpression>
+				<patternExpression><![CDATA[$F{COLUMN_10} + " recconoce a"]]></patternExpression>
+			</textField>
+			<image>
+				<reportElement x="530" y="290" width="90" height="90" uuid="1b419a0c-35f7-4ec2-b89e-b4c63dcc1cce"/>
+				<imageExpression><![CDATA["C:/Users/franc/Downloads/sello2.png"]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="190" y="350" width="150" height="29" uuid="849afc50-c36d-482f-bc59-749ed353e6a4"/>
+				<textElement textAlignment="Center">
+					<font fontName="Book Antiqua" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Inicio: " + new SimpleDateFormat("dd/MM/yyyy").format($F{fe_i})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00¤;#,##0.00- ¤">
+				<reportElement x="180" y="300" width="330" height="30" uuid="8ec1c615-cc6d-4c57-838d-daef26b2b101"/>
+				<textElement textAlignment="Center">
+					<font fontName="Book Antiqua" size="16" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{aporte}]]></textFieldExpression>
+			</textField>
+			<textField pattern="d/M/yyyy" isBlankWhenNull="true">
+				<reportElement x="360" y="350" width="138" height="28" uuid="82feeaeb-a955-4b6f-a5ca-246f1ef6a14b"/>
+				<textElement textAlignment="Center">
+					<font fontName="Book Antiqua" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fin}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="86">
+			<staticText>
+				<reportElement x="730" y="16" width="80" height="10" uuid="237d24dc-89c0-4791-bc36-2bcad7570cc3"/>
+				<textElement textAlignment="Left">
+					<font fontName="Book Antiqua" size="8"/>
+				</textElement>
+				<text><![CDATA[Reporte realizado por:]]></text>
+			</staticText>
+			<textField pattern="M/d/yy">
+				<reportElement x="720" y="76" width="90" height="10" uuid="bf83bfd0-4ebc-4a09-bdcb-38c50f884beb"/>
+				<textElement textAlignment="Right">
+					<font fontName="Book Antiqua" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement mode="Opaque" x="0" y="66" width="810" height="1" backcolor="#ADAAAA" uuid="f793f1b5-09b2-4e98-b997-b9bf855ebbd4">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="750" y="26" width="60" height="30" uuid="0b3d0180-4779-4f01-9b82-7b0f91d51529"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Book Antiqua" size="8"/>
+				</textElement>
+				<text><![CDATA[Arturo Hung
+Javier Molina
+Francis Bompart]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

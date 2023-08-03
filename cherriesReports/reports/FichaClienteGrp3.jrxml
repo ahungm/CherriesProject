@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="FichaCliente" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isIgnorePagination="true" uuid="5f299bbe-a106-4db3-908a-00178f566109">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="cerezas"/>
+	<parameter name="ID Empresa Cliente" class="java.lang.Integer"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT 
+       cl.nombre, 
+       cl.direc,
+       cl.t_negocio,
+       cl.rgo_inf,
+       cl.rgo_sup,
+       cl.prt_acep,
+       
+       p.nombre pais,
+       cd.nombre cdad
+       
+FROM fah_empresascliente cl, 
+     fah_paises p,
+     fah_ciudades cd
+     
+WHERE 
+      cl.id = $P{ID Empresa Cliente}  AND  
+      cl.id_pais = p.id AND 
+      cl.id_pais = cd.id_pais AND 
+      cl.id_cdad = cd.id]]>
+	</queryString>
+	<field name="nombre" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.label" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_empresascliente"/>
+	</field>
+	<field name="direc" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="direc"/>
+		<property name="com.jaspersoft.studio.field.label" value="direc"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_empresascliente"/>
+	</field>
+	<field name="t_negocio" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="t_negocio"/>
+		<property name="com.jaspersoft.studio.field.label" value="t_negocio"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_empresascliente"/>
+	</field>
+	<field name="rgo_inf" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="rgo_inf"/>
+		<property name="com.jaspersoft.studio.field.label" value="rgo_inf"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_empresascliente"/>
+	</field>
+	<field name="rgo_sup" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="rgo_sup"/>
+		<property name="com.jaspersoft.studio.field.label" value="rgo_sup"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_empresascliente"/>
+	</field>
+	<field name="prt_acep" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="prt_acep"/>
+		<property name="com.jaspersoft.studio.field.label" value="prt_acep"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_empresascliente"/>
+	</field>
+	<field name="pais" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.label" value="pais"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_paises"/>
+	</field>
+	<field name="cdad" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.label" value="cdad"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_ciudades"/>
+	</field>
+	<title>
+		<band height="40" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="555" height="40" forecolor="#FFFFFF" backcolor="#DD5353" uuid="31885aaa-fa7e-4fab-bebe-ec11456e9b8d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Book Antiqua" size="19" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ficha Técnica de Empresa Cliente]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="249">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="10" width="555" height="30" forecolor="#FFFFFF" backcolor="#DD5353" uuid="b2624d5d-7bc6-405c-8b00-4a2251783944"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Book Antiqua" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Datos Generales]]></text>
+			</staticText>
+			<frame>
+				<reportElement x="0" y="100" width="555" height="20" uuid="9acc3daa-1a05-4efa-9fa5-971608f89bd6">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.HorizontalRowLayout"/>
+				</reportElement>
+				<staticText>
+					<reportElement x="0" y="0" width="555" height="20" uuid="fe2275b8-b0eb-4a6a-9d1d-fa62994aa616"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="Book Antiqua" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Tipo de negocio]]></text>
+				</staticText>
+			</frame>
+			<frame>
+				<reportElement x="0" y="150" width="555" height="20" uuid="b81f604c-a015-47dd-bb9d-4944eef78308">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.HorizontalRowLayout"/>
+				</reportElement>
+				<staticText>
+					<reportElement x="0" y="0" width="555" height="20" uuid="bf1ab007-5a3b-41df-8016-6f1f7074b240"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="Book Antiqua" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Dirección]]></text>
+				</staticText>
+			</frame>
+			<frame>
+				<reportElement x="0" y="200" width="555" height="20" uuid="b659ba99-9ac1-473c-9caf-7dca16bb4466">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.HorizontalRowLayout"/>
+				</reportElement>
+				<staticText>
+					<reportElement x="0" y="0" width="278" height="20" uuid="d1084fe7-87dc-49b3-b735-451f2cb681ef"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="Book Antiqua" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Ciudad]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="278" y="0" width="277" height="20" uuid="2fcf4cb6-47bd-4b7c-ab5b-99db5555e01b"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="Book Antiqua" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[País]]></text>
+				</staticText>
+			</frame>
+			<frame>
+				<reportElement x="0" y="220" width="555" height="20" uuid="f6e3bc66-32e2-468a-bbcb-ef1f1b634147">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.HorizontalRowLayout"/>
+				</reportElement>
+				<textField>
+					<reportElement x="0" y="0" width="278" height="20" uuid="4bff7fdc-f62e-469b-b9c8-2e652e61df29"/>
+					<textElement>
+						<font fontName="Book Antiqua" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{cdad}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="278" y="0" width="277" height="20" uuid="47c7d62c-c617-4a45-ac28-6f73de1a7cbd"/>
+					<box leftPadding="5"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="Book Antiqua" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{pais}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<frame>
+				<reportElement x="0" y="50" width="555" height="40" uuid="04e4a011-8fba-4d82-b33c-c085f23f16c1">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+				</reportElement>
+				<staticText>
+					<reportElement x="0" y="0" width="555" height="20" uuid="568a3c6e-d19f-4732-b138-d55627f9ca5a"/>
+					<textElement>
+						<font fontName="Book Antiqua" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Nombre de la Empresa]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="0" y="20" width="555" height="20" uuid="bbd520c1-d96c-4597-a29b-03fd0d7efae3"/>
+					<box leftPadding="5"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="Book Antiqua" size="12" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<frame>
+				<reportElement x="0" y="120" width="554" height="20" uuid="765c229b-e065-4535-bdd3-2eae4dca6f3c">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.HorizontalRowLayout"/>
+				</reportElement>
+				<textField>
+					<reportElement x="0" y="0" width="554" height="20" uuid="5a6c1ecb-e76a-4bd8-ac8e-137410d0a686"/>
+					<box leftPadding="5"/>
+					<textElement>
+						<font fontName="Book Antiqua" size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{t_negocio}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<textField>
+				<reportElement x="0" y="170" width="555" height="20" forecolor="#000000" uuid="0aaa9938-e0e8-4980-85b1-7db7ec10c9b5"/>
+				<box leftPadding="5"/>
+				<textElement>
+					<font fontName="Book Antiqua" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{direc}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<subreport>
+				<reportElement x="0" y="10" width="555" height="20" uuid="881a2277-6de6-43ad-b5a1-07631da59e05"/>
+				<subreportParameter name="ID Empresa Cliente">
+					<subreportParameterExpression><![CDATA[$P{ID Empresa Cliente}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["SubFichaClienteGrp3.jrxml"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<summary>
+		<band height="98">
+			<staticText>
+				<reportElement x="461" y="20" width="95" height="10" uuid="850d8da1-5b9a-40e3-9e1b-e1e1d0ffbc6e"/>
+				<textElement textAlignment="Right">
+					<font fontName="Book Antiqua" size="8"/>
+				</textElement>
+				<text><![CDATA[Reporte realizado por:]]></text>
+			</staticText>
+			<textField pattern="M/d/yy">
+				<reportElement x="499" y="80" width="56" height="18" uuid="2e631774-51a4-4a1e-83a9-de2426fe30f7"/>
+				<textElement textAlignment="Right">
+					<font fontName="Book Antiqua" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement mode="Opaque" x="0" y="70" width="555" height="1" backcolor="#ADAAAA" uuid="7e4a6d91-92b2-4c93-900b-15225fc8d991">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="490" y="30" width="65" height="30" uuid="fccf0d2f-4e03-47ab-8a82-5c03992f859d"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Book Antiqua" size="8"/>
+				</textElement>
+				<text><![CDATA[Arturo Hung
+Javier Molina
+Francis Bompart]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

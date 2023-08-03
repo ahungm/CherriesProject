@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fichaProdProvs" pageWidth="555" pageHeight="100" whenNoDataType="BlankPage" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isFloatColumnFooter="true" whenResourceMissingType="Empty" uuid="38944e94-6e68-413a-a5b4-5bd788103d8b">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="cerezas"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<parameter name="productora" class="java.lang.Integer"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT pr.nombre prov, r.nombre neg
+FROM fah_ramasnegocio r, fah_proveedores pr, fah_empresasproductoras e, fah_convenios cn
+WHERE 	e.id = $P{productora} AND (cn.id_cat_prod = $P{productora} OR cn.id_asoc = e.id_asoc OR cn.id_cat_prod = e.id_coop)
+		AND cn.id_cat_prove = pr.id AND cn.vigencia = 'Activo'
+        AND pr.rama_neg = r.id
+ORDER BY pr.nombre]]>
+	</queryString>
+	<field name="prov" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.label" value="prov"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_proveedores"/>
+	</field>
+	<field name="neg" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre"/>
+		<property name="com.jaspersoft.studio.field.label" value="neg"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="fah_ramasnegocio"/>
+	</field>
+	<group name="grpNegocio">
+		<groupExpression><![CDATA[$F{neg}]]></groupExpression>
+		<groupHeader>
+			<band height="30">
+				<textField>
+					<reportElement mode="Opaque" x="0" y="10" width="555" height="20" forecolor="#FFFFFF" backcolor="#DD5353" uuid="7ead0f3f-c2fb-4f65-9c37-14cddcc20d73"/>
+					<box leftPadding="5"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Book Antiqua" size="14" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{neg}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="555" height="30" forecolor="#FFFFFF" backcolor="#DD5353" uuid="a3935b60-eb4f-4cef-9543-0aeb9cb6cfe0">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Book Antiqua" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Proveedores]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<textField>
+				<reportElement x="9" y="10" width="546" height="20" uuid="ef2e9445-dfa9-42e5-9ee3-a37473940a60"/>
+				<textElement>
+					<font fontName="Book Antiqua" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{prov}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
